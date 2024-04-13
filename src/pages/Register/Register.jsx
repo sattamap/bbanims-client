@@ -1,10 +1,149 @@
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 
 const Register = () => {
+
+
+    const {
+        register,
+        formState: { errors },
+      } = useForm();
     return (
-        <div>
-            <h2>This is my registration page</h2>
+        <div className="w-3/4  mx-auto mt-8 pb-2 bg-emerald-400 lg:p-20">
+      <div className=" items-center">
+        <div className='p-4'>
+          <h1 className="text-4xl font-bold mb-4">Create an Account</h1>
+          <p className="text-base text-gray-700">
+            Join the Inventory Management System . 
+          </p>
         </div>
+        <div className="w-5/6 mx-auto bg-white p-3 my-3 rounded-md shadow-xl md:w-4/5 lg:w-full xl:w-full">
+          <form>
+            <div className='flex flex-col lg:flex-row gap-6 mb-6'>
+              <div className="form-control w-full">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-600">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  {...register('name', { required: true })}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  placeholder="Enter your name"
+                />
+                {errors.name && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+              </div>
+
+              <div className="form-control w-full ">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-600">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  {...register('email', { required: true })}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  placeholder="Enter your email"
+                />
+                {errors.email && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+              </div>
+            </div>
+
+            <div className='flex flex-col lg:flex-row gap-6 mb-6'>
+              <div className="form-control w-full ">
+                <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">
+                  Photo
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  {...register('image')}
+                  className="border rounded w-full py-[6px] px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Choose your profile picture"
+                />
+              </div>
+            </div>
+
+            <div className='flex flex-col lg:flex-row gap-6 mb-6'>
+              <div className="form-control w-full">
+                <label htmlFor="section" className="block text-sm font-medium text-gray-600">
+                  Section
+                </label>
+                <select
+                  {...register('section', { required: true })}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  placeholder="Select your section"
+                >
+                  <option value="default" disabled>Select Section</option>
+                  <option value="Program">Program</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="News">News</option>
+                </select>
+                {errors.section && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+              </div>
+
+              <div className="form-control w-full">
+                <label htmlFor="designation" className="block text-sm font-medium text-gray-600">
+                  Designation
+                </label>
+                <input
+                  type="text"
+                  {...register('designation', { required: true })}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  placeholder="Enter your designation"
+                />
+                {errors.designation && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+              </div>
+            </div>
+            <div className='flex flex-col lg:flex-row gap-6 mb-6'>
+            <div className="form-control w-full relative">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  {...register('Password', {
+                    required: true,
+                  })}
+                  className={`mt-1 p-2 w-full border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                  placeholder="Enter password"
+                />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-xs mt-1">{errors.confirmPassword?.message}</p>
+                )}
+              </div>
+
+              <div className="form-control w-full relative">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  {...register('confirmPassword', {
+                    required: true,
+                  })}
+                  className={`mt-1 p-2 w-full border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+                  placeholder="Confirm password"
+                />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-xs mt-1">{errors.confirmPassword?.message}</p>
+                )}
+              </div>
+            </div>
+         
+
+            <div className='flex justify-center'>
+              <button type="submit" className="btn btn-sm sm:btn-sm md:btn-md  bg-blue-500 text-white rounded-xl mt-4">
+                Sign Up
+              </button>
+            </div>
+          </form>
+
+          <p className="text-center mt-3">
+            Already have an account? <Link to="/" className="text-blue-500">Login</Link>
+          </p>
+        </div>
+      </div>
+    </div>
     );
 };
 
