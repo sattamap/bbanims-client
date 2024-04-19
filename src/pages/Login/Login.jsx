@@ -1,9 +1,51 @@
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../provider/AuthProvider";
+import Swal from "sweetalert2";
 
 
 const Login = () => {
-    const { register} = useForm();
+    const { register, handleSubmit} = useForm();
+    const { signIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const onSubmit = (data) => {
+        let errorMessage = 'An error occurred during login. Please try again.';
+
+        signIn(data.email, data.password)
+            .then((result) => {
+                const user = result.user;
+                const displayName = user.displayName || ''; // Get the user's display name (if available)
+                const welcomeMessage = `Welcome back to the GPMS, ${displayName}!`; // Construct the welcome message
+                
+                Swal.fire({
+                    title: 'Login Successful',
+                    text: welcomeMessage,
+                    icon: 'success',
+                });
+
+                // Redirect to the "Home" page
+                navigate('/register');
+            })
+            .catch((error) => {
+                console.log("error object:", error);
+                
+                // Check for specific error code 'auth/invalid-credential'
+                if (error.code === 'auth/invalid-credential') {
+                    errorMessage = 'Invalid credentials. Please check your email and password.';
+                }
+
+                Swal.fire({
+                    title: 'Login Failed',
+                    text: errorMessage,
+                    icon: 'error',
+                });
+            });
+    };
+
+
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-emerald-400">
         <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md">
@@ -21,7 +63,7 @@ const Login = () => {
               </p>
             </div>
             <div>
-              <form >
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
