@@ -2,7 +2,9 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import useAxiosPublic from "../hooks/useAxiosPublic";
-import { FaUsers } from "react-icons/fa";
+import { FaHome, FaUsers } from "react-icons/fa";
+import { TbUsersPlus } from "react-icons/tb";
+import { RiUserSharedFill } from "react-icons/ri";
 
 
 const Dashboard = () => {
@@ -25,6 +27,15 @@ const Dashboard = () => {
           case "admin":
             navigate("/dashboard/allUsers");
             break;
+          case "coordinator":
+                navigate("/dashboard/addItems");
+                break;
+          case "monitor":
+                navigate("/dashboard/items");
+                break;
+          case "none":
+              default:
+                navigate("/dashboard/none");
           
         }
       } catch (error) {
@@ -57,6 +68,35 @@ const Dashboard = () => {
               </li>
            
             </>
+          )}
+
+{userData?.status === "coordinator" && (
+            // Add links specific to the coordinator
+            <li>
+            <NavLink to="/dashboard/addItems">
+              <TbUsersPlus /> Add Items
+            </NavLink>
+          </li>
+          )}
+
+
+{userData?.status === "monitor" && (
+          
+          <li>
+          <NavLink to="/dashboard/items">
+          <RiUserSharedFill/> Items
+          </NavLink>
+        </li>
+     )}
+
+
+{userData?.status === "none" && (
+            // Add links specific to the coordinator
+            <li>
+            <NavLink to="/dashboard/none">
+              <FaHome /> Home
+            </NavLink>
+          </li>
           )}
 
           
