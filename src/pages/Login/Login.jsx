@@ -26,7 +26,7 @@ const Login = () => {
                 });
 
                 // Redirect to the "Home" page
-                navigate('/register');
+                navigate('/dashboard/');
             })
             .catch((error) => {
                 console.log("error object:", error);
