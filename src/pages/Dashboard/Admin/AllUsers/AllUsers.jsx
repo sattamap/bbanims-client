@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import {  FaTrash } from "react-icons/fa";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 
 
@@ -10,7 +11,7 @@ const AllUsers = () => {
   const axiosPublic = useAxiosPublic();
  
 
-  const { data: users = [], isLoading} = useQuery({
+  const { data: users = [], isLoading, refetch} = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosPublic.get("/users");
@@ -21,6 +22,42 @@ const AllUsers = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+
+  const handleToggleRole = (user) => {
+    Swal.fire({
+      title: `Select the new role for ${user.name}:`,
+      input: 'select',
+      inputOptions: {
+        admin: 'Admin',
+        monitor: 'Monitor',
+        coordinator: 'Coordinator',
+        none: 'No Role', // Add 'none' option for "No Role"
+      },
+      inputPlaceholder: 'Select a role',
+      showCancelButton: true,
+      confirmButtonText: 'Change',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const newRole = result.value === 'none' ? 'none' : result.value;
+        axiosPublic.patch(`/users/status/${user._id}`, { status: newRole }).then((res) => {
+          if (res.data.modifiedCount > 0) {
+            refetch();
+            const roleMessage =
+              newRole === "admin" ? "Admin" : newRole === "monitor" ? "Monitor" : newRole === "coordinator" ? "Coordinator" : "No Role";
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: `${user.name}'s role has been changed to ${roleMessage}`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        });
+      }
+    });
+  };
+  
 
  
   return (
@@ -48,7 +85,26 @@ const AllUsers = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
- role
+                <button
+    onClick={() => handleToggleRole(user)}
+    className={`btn btn-ghost btn-xs ${
+      user.status === "admin"
+        ? "text-blue-500"
+        : user.status === "monitor"
+        ? "text-yellow-500"
+        : user.status === "coordinator"
+        ? "text-red-500"
+        : "text-gray-500" // Use gray color for "No Role"
+    }`}
+  >
+    {user.status === "admin"
+      ? "Admin"
+      : user.status === "monitor"
+      ? "Monitor"
+      : user.status === "coordinator"
+      ? "Coordinator"
+      : "No Role"}
+  </button>
 </td>
 
   
