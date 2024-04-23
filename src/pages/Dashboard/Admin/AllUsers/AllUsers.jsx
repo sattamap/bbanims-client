@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 const AllUsers = () => {
   const axiosPublic = useAxiosPublic();
- 
+  
 
   const { data: users = [], isLoading, refetch} = useQuery({
     queryKey: ["users"],
@@ -57,6 +57,49 @@ const AllUsers = () => {
       }
     });
   };
+
+
+  
+  const handleDelete = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Delete user from MongoDB
+        axiosPublic.delete(`/users/${user._id}`).then(res => {
+          if (res.data.deletedCount > 0) {
+            // User successfully deleted from MongoDB
+            refetch(); // Refresh data
+            Swal.fire({
+              title: "Deleted!",
+              text: "The user has been deleted.",
+              icon: "success"
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to delete user.",
+              icon: "error"
+            });
+          }
+        }).catch(error => {
+          console.error("Error deleting user from MongoDB:", error);
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to delete user.",
+            icon: "error"
+          });
+        });
+      }
+    });
+};
+
   
 
  
@@ -116,7 +159,8 @@ const AllUsers = () => {
                   </button>
                 </td>
                 <th>
-                  <button
+                <button
+                    onClick={() => handleDelete(user)}
                     className="btn btn-ghost btn-xs"
                   >
                     <FaTrash></FaTrash>
