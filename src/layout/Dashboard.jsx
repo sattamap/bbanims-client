@@ -5,6 +5,7 @@ import useAxiosPublic from "../hooks/useAxiosPublic";
 import { FaHome, FaSignOutAlt, FaUsers } from "react-icons/fa";
 import { TbUsersPlus } from "react-icons/tb";
 import { RiUserSharedFill } from "react-icons/ri";
+import { MdEditNote } from "react-icons/md";
 
 
 const Dashboard = () => {
@@ -86,6 +87,9 @@ console.log(userData);
             <li>
             <NavLink to="/dashboard/addItems">
               <TbUsersPlus /> Add Items
+            </NavLink>
+            <NavLink to="/dashboard/manageItems">
+            <MdEditNote /> Manage Items
             </NavLink>
           </li>
           )}
