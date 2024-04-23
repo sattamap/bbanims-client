@@ -41,7 +41,7 @@ const AddItems = () => {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: `${data.birdNameENG} is added to the menu.`,
+          title: `${data.itemName} is added to the menu.`,
           showConfirmButton: false,
           timer: 1500
         });

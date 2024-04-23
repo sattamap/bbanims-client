@@ -9,6 +9,7 @@ import AllUsers from "../pages/Dashboard/Admin/AllUsers/AllUsers";
 import AddItems from "../pages/Dashboard/Coordinator/AddItems/AddItems";
 import Items from "../pages/Dashboard/Monitor/Items/Items";
 import WelcomeMsg from "../pages/Dashboard/NoRole/WelcomeMsg.jsx/WelcomeMsg";
+import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,11 @@ export const router = createBrowserRouter([
       {
         path: "addItems",
         element:<AddItems></AddItems>,
+      },
+      
+      {
+        path: "manageItems",
+        element:<ManageItems></ManageItems>,
       },
       
       // monitor routes
