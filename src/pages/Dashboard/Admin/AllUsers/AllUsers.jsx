@@ -1,14 +1,18 @@
 
 import { useQuery } from "@tanstack/react-query";
-import {  FaTrash } from "react-icons/fa";
+import {  FaTimes, FaTrash } from "react-icons/fa";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import Modal from 'react-modal';
+import { useState } from "react";
 
 
-
+Modal.setAppElement('#root');
 
 const AllUsers = () => {
   const axiosPublic = useAxiosPublic();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
 
   const { data: users = [], isLoading, refetch} = useQuery({
@@ -100,6 +104,18 @@ const AllUsers = () => {
     });
 };
 
+
+
+const handleSeeInfo = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedUser(null);
+    setIsModalOpen(false);
+  };
+
   
 
  
@@ -151,15 +167,16 @@ const AllUsers = () => {
 </td>
 
   
-                <td>
+<td>
                   <button
+                    onClick={() => handleSeeInfo(user)}
                     className="btn btn-ghost btn-xs"
                   >
                     See Info
                   </button>
                 </td>
                 <th>
-                <button
+                  <button
                     onClick={() => handleDelete(user)}
                     className="btn btn-ghost btn-xs"
                   >
@@ -171,6 +188,49 @@ const AllUsers = () => {
           </tbody>
         </table>
       </div>
+      <Modal
+  isOpen={isModalOpen}
+  onRequestClose={handleCloseModal}
+  contentLabel="User Information"
+  style={{
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    },
+    content: {
+      width: '80%', // Adjusted width for smaller screens
+      maxWidth: '400px', // Maximum width to maintain readability
+      height: 'auto', // Height will adjust based on content
+      maxHeight: '80%', // Maximum height to avoid overflow
+      margin: 'auto',
+      borderRadius: '8px',
+      padding: '10px',
+    },
+  }}
+>
+  <button
+    onClick={handleCloseModal}
+    className="absolute top-0 right-0 p-2 cursor-pointer"
+  >
+    <FaTimes />
+  </button>
+  {selectedUser && (
+    <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+      <div>
+        <p><strong>Name:</strong> {selectedUser.name}</p>
+        <p><strong>Email:</strong> {selectedUser.email}</p>
+        <p><strong>Section:</strong> {selectedUser.section}</p>
+        <p><strong>Designation:</strong> {selectedUser.designation}</p>
+      </div>
+      <div className="w-2/5 md:w-32 h-auto">
+        <img
+          src={selectedUser.photoURL}
+          alt={selectedUser.name}
+          className="w-full h-full  md:object-contain"
+        />
+      </div>
+    </div>
+  )}
+</Modal>
     </div>
   );
 };
