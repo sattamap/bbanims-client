@@ -2,13 +2,13 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import useAxiosPublic from "../hooks/useAxiosPublic";
-import { FaHome, FaUsers } from "react-icons/fa";
+import { FaHome, FaSignOutAlt, FaUsers } from "react-icons/fa";
 import { TbUsersPlus } from "react-icons/tb";
 import { RiUserSharedFill } from "react-icons/ri";
 
 
 const Dashboard = () => {
-  const { user} = useContext(AuthContext);
+  const { user, logOut} = useContext(AuthContext);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const axiosPublic = useAxiosPublic();
@@ -18,6 +18,7 @@ const Dashboard = () => {
       try {
         const response = await axiosPublic.get(`/user/${user.email}`);
         const data = response.data;
+
   
         const userObject = Array.isArray(data) ? data[0] : data;
         setUserData(userObject);
@@ -46,6 +47,16 @@ const Dashboard = () => {
     fetchUserData();
   }, [user, axiosPublic, navigate]);
 
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => console.log(error));
+  };
+
+console.log(userData);
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
       <div className="w-full lg:w-64 lg:min-h-screen bg-[#38a9a1]">
@@ -99,7 +110,13 @@ const Dashboard = () => {
           </li>
           )}
 
-          
+<div className="divider"></div>
+
+<li>
+  <NavLink onClick={handleLogOut}>
+    <FaSignOutAlt /> Logout
+  </NavLink>
+</li>
         </ul>
       </div>
       <div className="flex-1 p-10">
