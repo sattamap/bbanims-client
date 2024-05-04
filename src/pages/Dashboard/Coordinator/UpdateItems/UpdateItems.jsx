@@ -123,7 +123,7 @@ const UpdateItems = () => {
             <input
               type="file"
               id="image"
-              {...register('image')}
+              {...register('image', { required: true })}
               className="border rounded w-full py-[6px] px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
             <p className="text-teal-600 text-xs mt-1">
