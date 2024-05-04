@@ -12,7 +12,8 @@ import WelcomeMsg from "../pages/Dashboard/NoRole/WelcomeMsg.jsx/WelcomeMsg";
 import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems";
 import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems";
 import CoordinatorHome from "../pages/Dashboard/Coordinator/CoordinatorHome/CoordinatorHome";
-import Equipment from "../pages/Dashboard/Common/Components/equipment";
+import EquipmentList from "../pages/Dashboard/Common/Components/EquipmentList";
+
 
 export const router = createBrowserRouter([
   {
@@ -38,9 +39,10 @@ export const router = createBrowserRouter([
 
       // common routes
    
+      
       {
-        path: "equipment",
-        element: <Equipment></Equipment>,
+        path: "equipmentList",
+        element: <EquipmentList></EquipmentList>,
       },
 
 
