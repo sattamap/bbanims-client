@@ -120,7 +120,7 @@ const ManageItems = () => {
                     >
                       Delete
                     </button>
-                    <Link to='/dashboard/updateItem/${item._id}'>
+                    <Link to={`/dashboard/updateItem/${item._id}`}>
                       <button className="btn btn-neutral btn-xs">Edit</button>
                     </Link>
                   </div>
