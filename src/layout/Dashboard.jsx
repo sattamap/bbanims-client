@@ -3,24 +3,22 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { FaHome, FaSignOutAlt, FaUsers } from "react-icons/fa";
-import { TbUsersPlus } from "react-icons/tb";
+import { MdFormatListBulletedAdd } from "react-icons/md";
 import { RiUserSharedFill } from "react-icons/ri";
 import { MdEditNote } from "react-icons/md";
 
-
 const Dashboard = () => {
-  const { user, logOut} = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const axiosPublic = useAxiosPublic();
- 
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axiosPublic.get(`/user/${user.email}`);
         const data = response.data;
 
-  
         const userObject = Array.isArray(data) ? data[0] : data;
         setUserData(userObject);
 
@@ -30,24 +28,22 @@ const Dashboard = () => {
             navigate("/dashboard/allUsers");
             break;
           case "coordinator":
-                navigate("/dashboard/coordinatorHome");
-                break;
+            navigate("/dashboard/coordinatorHome");
+            break;
           case "monitor":
-                navigate("/dashboard/items");
-                break;
+            navigate("/dashboard/items");
+            break;
           case "none":
-              default:
-                navigate("/dashboard/none");
-          
+          default:
+            navigate("/dashboard/none");
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
-  
+
     fetchUserData();
   }, [user, axiosPublic, navigate]);
-
 
   const handleLogOut = () => {
     logOut()
@@ -57,7 +53,7 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   };
 
-console.log(userData);
+  console.log(userData);
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
       <div className="w-full lg:w-64 lg:min-h-screen bg-[#38a9a1]">
@@ -72,58 +68,65 @@ console.log(userData);
         <ul className="menu p-4">
           {userData?.status === "admin" && (
             <>
-            
               <li>
                 <NavLink to="/dashboard/allUsers">
                   <FaUsers /> All Users
                 </NavLink>
+                <NavLink to="/dashboard/coordinatorHome">
+                  <FaHome /> Home
+                </NavLink>
+                <NavLink to="/dashboard/addItems">
+                  <MdFormatListBulletedAdd /> Add Items
+                </NavLink>
+                <NavLink to="/dashboard/manageItems">
+                  <MdEditNote /> Manage Items
+                </NavLink>
               </li>
-           
             </>
           )}
 
-{userData?.status === "coordinator" && (
+          {userData?.status === "coordinator" && (
             // Add links specific to the coordinator
             <li>
-            <NavLink to="/dashboard/coordinatorHome">
-              <TbUsersPlus /> Home
-            </NavLink>
-            <NavLink to="/dashboard/addItems">
-              <TbUsersPlus /> Add Items
-            </NavLink>
-            <NavLink to="/dashboard/manageItems">
-            <MdEditNote /> Manage Items
-            </NavLink>
-          </li>
+              <NavLink to="/dashboard/coordinatorHome">
+                <FaHome /> Home
+              </NavLink>
+              <NavLink to="/dashboard/addItems">
+                <MdFormatListBulletedAdd /> Add Items
+              </NavLink>
+              <NavLink to="/dashboard/manageItems">
+                <MdEditNote /> Manage Items
+              </NavLink>
+            </li>
           )}
 
+          {userData?.status === "monitor" && (
+            <li>
+              <NavLink to="/dashboard/coordinatorHome">
+                <FaHome /> Home
+              </NavLink>
+              <NavLink to="/dashboard/items">
+                <RiUserSharedFill /> Items
+              </NavLink>
+            </li>
+          )}
 
-{userData?.status === "monitor" && (
-          
+          {userData?.status === "none" && (
+            // Add links specific to the coordinator
+            <li>
+              <NavLink to="/dashboard/none">
+                <FaHome /> Home
+              </NavLink>
+            </li>
+          )}
+
+          <div className="divider"></div>
+
           <li>
-          <NavLink to="/dashboard/items">
-          <RiUserSharedFill/> Items
-          </NavLink>
-        </li>
-     )}
-
-
-{userData?.status === "none" && (
-            // Add links specific to the coordinator
-            <li>
-            <NavLink to="/dashboard/none">
-              <FaHome /> Home
+            <NavLink onClick={handleLogOut}>
+              <FaSignOutAlt /> Logout
             </NavLink>
           </li>
-          )}
-
-<div className="divider"></div>
-
-<li>
-  <NavLink onClick={handleLogOut}>
-    <FaSignOutAlt /> Logout
-  </NavLink>
-</li>
         </ul>
       </div>
       <div className="flex-1 p-10">
