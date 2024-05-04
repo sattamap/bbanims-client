@@ -85,7 +85,7 @@ const AddItems = () => {
     {...register("category", { required: true })}
     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
   >
-    <option value="Parts">Parts</option>
+    <option value="SpareParts">Spare Parts</option>
     <option value="Equipment">Equipment</option>
     <option value="Furniture">Furniture</option>
     <option value="Others">Others</option>

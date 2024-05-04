@@ -13,6 +13,7 @@ import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems"
 import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems";
 import CoordinatorHome from "../pages/Dashboard/Coordinator/CoordinatorHome/CoordinatorHome";
 import EquipmentList from "../pages/Dashboard/Common/Components/EquipmentList";
+import SparePartsList from "../pages/Dashboard/Common/Components/SparePartsList";
 
 
 export const router = createBrowserRouter([
@@ -43,6 +44,11 @@ export const router = createBrowserRouter([
       {
         path: "equipmentList",
         element: <EquipmentList></EquipmentList>,
+      },
+      
+      {
+        path: "spareParts",
+        element: <SparePartsList></SparePartsList>,
       },
 
 
