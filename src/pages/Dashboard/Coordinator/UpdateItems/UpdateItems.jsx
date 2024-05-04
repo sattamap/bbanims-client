@@ -12,7 +12,7 @@ const UpdateItems = () => {
     const {itemName,condition,quantity,date,detail, _id} = useLoaderData();
 
     const axiosPublic = useAxiosPublic();
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit,formState: { errors } } = useForm()
     const onSubmit = async (data) => {
       console.log(data);
       const imageFile = { image: data.image[0] }
@@ -126,6 +126,12 @@ const UpdateItems = () => {
               {...register('image')}
               className="border rounded w-full py-[6px] px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
+            <p className="text-teal-600 text-xs mt-1">
+  ** Image must be required. Please choose your image.
+  </p>
+  {errors.image && (
+    <p className="text-red-500 text-xs font-semibold mt-1">Image is required. Please choose your image.</p>
+  )}
           </div>
         </div>
         <div className="flex justify-center">
