@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
+import { useEffect, useState } from "react";
 
 
 
@@ -12,41 +13,55 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 
 const AddItems = () => {
   const axiosPublic = useAxiosPublic();
-  const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset, watch } = useForm();
+  const [category, setCategory] = useState(""); // State variable to track the category
+  const [specificCategory, setSpecificCategory] = useState(""); // State variable for specific category
+
+  // Monitor the selected category using the watch function
+  const selectedCategory = watch("category");
+
+  useEffect(() => {
+      // Update the category state variable when the selected category changes
+      setCategory(selectedCategory);
+  }, [selectedCategory]);
+
   const onSubmit = async (data) => {
-    console.log(data);
-    const imageFile = { image: data.image[0] }
-    const res = await axiosPublic.post(image_hosting_api, imageFile, {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
-    });
+      console.log(data);
+      const imageFile = { image: data.image[0] };
+      const res = await axiosPublic.post(image_hosting_api, imageFile, {
+          headers: {
+              'content-type': 'multipart/form-data'
+          }
+      });
 
-    if (res.data.success) {
-      const item = {
+      if (res.data.success) {
+          const item = {
+              itemName: data.itemName,
+              category: category === "Others" ? specificCategory : category,
+              model: data.model,
+              origin: data.origin,
+              condition: data.condition,
+              location: data.location,
+              quantity: data.quantity,
+              date: data.date,
+              detail: data.detail,
+              image: res.data.data.display_url,
+          };
 
-        itemName: data.itemName,
-        condition: data.condition,
-        quantity: data.quantity,
-        date: data.date,
-        detail: data.detail,
-        image: res.data.data.display_url,
+          const result = await axiosPublic.post('/item', item);
+          console.log(result.data);
+          if (result.data.insertedId) {
+              // Show success popup
+              reset();
+              Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: `${data.itemName} has been added to the inventory.`,
+                  showConfirmButton: false,
+                  timer: 1500
+              });
+          }
       }
-      // 
-      const result = await axiosPublic.post('/item', item);
-      console.log(result.data)
-      if (result.data.insertedId) {
-        // show success popup
-        reset();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${data.itemName} is added to the menu.`,
-          showConfirmButton: false,
-          timer: 1500
-        });
-      }
-    }
   };
 
   return (
@@ -63,10 +78,71 @@ const AddItems = () => {
 
           </div>
           <div className="form-control w-full ">
+  <label className="block text-gray-700 text-sm font-bold mb-2">
+    <span className="label-text">Category</span>
+  </label>
+  <select
+    {...register("category", { required: true })}
+    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+  >
+    <option value="Parts">Parts</option>
+    <option value="Equipment">Equipment</option>
+    <option value="Furniture">Furniture</option>
+    <option value="Others">Others</option>
+  </select>
+
+  {/* Conditionally render specific category input based on selection */}
+  {category === "Others" && (
+                            <div className="mt-2">
+                                <input
+                                    type="text"
+                                    placeholder="Specify the category"
+                                    value={specificCategory}
+                                    onChange={(e) => setSpecificCategory(e.target.value)}
+                                    className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+                                />
+                            </div>
+                        )}
+</div>
+
+
+        </div>
+        <div className="flex flex-col lg:flex-row gap-6 mb-6">
+          <div className="form-control w-full ">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <span className="label-text">Model Name</span>
+            </label>
+            <input type="text" placeholder="e.g. AM-10A" {...register("model")} 
+              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+            />
+
+          </div>
+          <div className="form-control w-full ">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <span className="label-text">Country Origin</span>
+            </label>
+            <input type="text" placeholder="e.g. USA " {...register("origin", { required: true })} required
+              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+            />
+
+          </div>
+
+        </div>
+        <div className="flex flex-col lg:flex-row gap-6 mb-6">
+        <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               <span className="label-text">Condition of Item</span>
             </label>
             <input type="text" placeholder="e.g. Good/Bad " {...register("condition", { required: true })} required
+              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+            />
+
+          </div>
+          <div className="form-control w-full ">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <span className="label-text">Current Location</span>
+            </label>
+            <input type="text" placeholder="e.g. At Store/FM Room " {...register("location", { required: true })} required
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
             />
 
@@ -103,7 +179,7 @@ const AddItems = () => {
             </label>
             <textarea
               id="detail"
-              placeholder="Write about specs, model name, country origin etc of the item . . . . ."
+              placeholder="Write about specs, application etc of the item . . . . ."
               {...register('detail')}
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
