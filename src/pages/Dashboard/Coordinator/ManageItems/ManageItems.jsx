@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 
@@ -22,8 +23,54 @@ const ManageItems = () => {
     fetchItems();
   }, [axiosPublic]);
 
+  
+  const handleDelete = async (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await axiosPublic.delete(`/item/${item._id}`);
+          console.log(res.data);
 
-
+          if (res.status === 200) {
+            // refetch to update the ui
+            const updatedItems = items.filter((i) => i._id !== item._id);
+            setItems(updatedItems);
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: `${item.itemName} has been deleted`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            // Handle the case where the bird was not deleted
+            console.error("Error deleting bird:", res.data);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+          }
+        } catch (error) {
+          console.error("Error deleting bird:", error);
+          // Handle the case where an error occurred during deletion
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+        }
+      }
+    });
+  };
 
 
   return (
@@ -67,8 +114,9 @@ const ManageItems = () => {
                 </td>
                 <th>
                   <div className="flex gap-2">
-                    <button
+                  <button
                       className="btn btn-warning btn-xs"
+                      onClick={() => handleDelete(item)}
                     >
                       Delete
                     </button>
