@@ -11,6 +11,7 @@ import Items from "../pages/Dashboard/Monitor/Items/Items";
 import WelcomeMsg from "../pages/Dashboard/NoRole/WelcomeMsg.jsx/WelcomeMsg";
 import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems";
 import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems";
+import CoordinatorHome from "../pages/Dashboard/Coordinator/CoordinatorHome/CoordinatorHome";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
     children: [
 
 
+
       // admin routes
    
       {
@@ -42,6 +44,10 @@ export const router = createBrowserRouter([
      
       // coordinator routes
      
+      {
+        path: "coordinatorHome",
+        element:<CoordinatorHome></CoordinatorHome>,
+      },
       {
         path: "addItems",
         element:<AddItems></AddItems>,

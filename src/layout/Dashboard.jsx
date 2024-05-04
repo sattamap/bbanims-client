@@ -30,7 +30,7 @@ const Dashboard = () => {
             navigate("/dashboard/allUsers");
             break;
           case "coordinator":
-                navigate("/dashboard/addItems");
+                navigate("/dashboard/coordinatorHome");
                 break;
           case "monitor":
                 navigate("/dashboard/items");
@@ -85,6 +85,9 @@ console.log(userData);
 {userData?.status === "coordinator" && (
             // Add links specific to the coordinator
             <li>
+            <NavLink to="/dashboard/coordinatorHome">
+              <TbUsersPlus /> Home
+            </NavLink>
             <NavLink to="/dashboard/addItems">
               <TbUsersPlus /> Add Items
             </NavLink>
