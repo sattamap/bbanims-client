@@ -52,9 +52,12 @@ export const router = createBrowserRouter([
         element:<ManageItems></ManageItems>,
       },
       {
-        path: "updateItems",
+        path: 'updateItem/:id',
         element:<UpdateItems></UpdateItems>,
+        loader: ({params})=> fetch(`http://localhost:5000/items/${params.id}`)
+
       },
+
       
       // monitor routes
      
