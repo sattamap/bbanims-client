@@ -12,6 +12,7 @@ import WelcomeMsg from "../pages/Dashboard/NoRole/WelcomeMsg.jsx/WelcomeMsg";
 import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems";
 import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems";
 import CoordinatorHome from "../pages/Dashboard/Coordinator/CoordinatorHome/CoordinatorHome";
+import Equipment from "../pages/Dashboard/Common/Components/equipment";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ export const router = createBrowserRouter([
     element: <Dashboard></Dashboard>,
     children: [
 
+
+
+      // common routes
+   
+      {
+        path: "equipment",
+        element: <Equipment></Equipment>,
+      },
 
 
       // admin routes
