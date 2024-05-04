@@ -1,16 +1,58 @@
 
 import { useForm } from "react-hook-form";
 import { useLoaderData } from "react-router-dom";
+import useAxiosPublic from "../../../../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const UpdateItems = () => {
-    const { register } = useForm()
-    const {itemName,condition,quantity,date,detail} = useLoaderData();
+    const {itemName,condition,quantity,date,detail, _id} = useLoaderData();
+
+    const axiosPublic = useAxiosPublic();
+    const { register, handleSubmit } = useForm()
+    const onSubmit = async (data) => {
+      console.log(data);
+      const imageFile = { image: data.image[0] }
+      const res = await axiosPublic.post(image_hosting_api, imageFile, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      });
+  
+      if (res.data.success) {
+        const item = {
+  
+            itemName: data.itemName,
+            condition: data.condition,
+            quantity: data.quantity,
+            date: data.date,
+            detail: data.detail,
+            image: res.data.data.display_url,
+          
+        }
+        // 
+        const itemResult = await axiosPublic.patch(`/items/${_id}`, item);
+        if(itemResult.data.modifiedCount > 0){
+          // show success popup
+          Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: `${data.itemName} is updated to the menu.`,
+              showConfirmButton: false,
+              timer: 1500
+            });
+      }
+      }
+     
+    };
+  
 
   return (
     <div className="w-full mx-auto bg-white p-4 my-10 rounded-md shadow-xl md:w-4/5 lg:w-full xl:w-full">
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col lg:flex-row gap-6 mb-6">
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -81,7 +123,7 @@ const UpdateItems = () => {
             <input
               type="file"
               id="image"
-              {...register('image', { required: true })}
+              {...register('image')}
               className="border rounded w-full py-[6px] px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
