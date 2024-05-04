@@ -23,7 +23,7 @@ const ManageItems = () => {
     fetchItems();
   }, [axiosPublic]);
 
-  
+
   const handleDelete = async (item) => {
     Swal.fire({
       title: "Are you sure?",
@@ -120,7 +120,7 @@ const ManageItems = () => {
                     >
                       Delete
                     </button>
-                    <Link to='\'>
+                    <Link to='/dashboard/updateItems'>
                       <button className="btn btn-neutral btn-xs">Edit</button>
                     </Link>
                   </div>

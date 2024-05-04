@@ -10,6 +10,7 @@ import AddItems from "../pages/Dashboard/Coordinator/AddItems/AddItems";
 import Items from "../pages/Dashboard/Monitor/Items/Items";
 import WelcomeMsg from "../pages/Dashboard/NoRole/WelcomeMsg.jsx/WelcomeMsg";
 import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems";
+import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: "manageItems",
         element:<ManageItems></ManageItems>,
+      },
+      {
+        path: "updateItems",
+        element:<UpdateItems></UpdateItems>,
       },
       
       // monitor routes
