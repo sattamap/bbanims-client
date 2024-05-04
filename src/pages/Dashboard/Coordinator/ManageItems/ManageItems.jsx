@@ -81,10 +81,11 @@ const ManageItems = () => {
           <thead>
             <tr>
               <th></th>
-              <th>Name,Image & Condition</th>
+              <th>Name, Image, Model <br/>& Country Origin</th>
               <th>Quantity</th>
               <th>Date of Receive</th>
               <th>Detail</th>
+              <th>Location & Condition</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -101,7 +102,8 @@ const ManageItems = () => {
                     </div>
                     <div>
                       <div className="font-bold">{item?.itemName}</div>
-                      <div className="text-sm opacity-50">{item?.condition}</div>
+                      <div className="text-sm opacity-50">{item?.model}</div>
+                      <div className="text-sm opacity-50">{item?.origin}</div>
                     </div>
                   </div>
                 </td>
@@ -111,6 +113,10 @@ const ManageItems = () => {
                 <td>{item?.date}</td>
                 <td>
                   <p className="">{item?.detail}</p>
+                </td>
+                <td>
+                  <p className="">{item?.location}</p>
+                  <p className="">{item?.condition}</p>
                 </td>
                 <th>
                   <div className="flex gap-2">
