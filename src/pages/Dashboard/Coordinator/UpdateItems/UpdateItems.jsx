@@ -130,7 +130,7 @@ const UpdateItems = () => {
         </div>
         <div className="flex justify-center">
           <button className="btn w-1/2 mt-10 bg-emerald-700 text-white hover:bg-emerald-950 hover:text-white ">
-            Add Item
+            Update Item
           </button>
         </div>
       </form>
