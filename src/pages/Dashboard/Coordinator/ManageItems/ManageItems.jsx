@@ -149,7 +149,7 @@ const ManageItems = () => {
                     <Link to={`/dashboard/updateItem/${item._id}`}>
                       <button className="btn btn-neutral btn-xs">Edit</button>
                     </Link>
-                    <Link to=''>
+                    <Link to={`/dashboard/details/${item._id}`}>
                       <button className="btn btn-neutral btn-xs">Detail</button>
                     </Link>
                   </div>

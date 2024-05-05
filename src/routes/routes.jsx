@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
         element: <SparePartsList></SparePartsList>,
       },
       {
-        path: "details",
+        path: "details/:id",
         element: <Details></Details>,
       },
 
