@@ -119,15 +119,14 @@ const Dashboard = () => {
               </NavLink>
             </li>
           )}
-
-          <div className="divider"></div>
-
-          <li>
-            <NavLink onClick={handleLogOut}>
-              <FaSignOutAlt /> Logout
-            </NavLink>
-          </li>
         </ul>
+        <div className="divider"></div>
+
+        <li className="menu">
+          <NavLink onClick={handleLogOut}>
+            <FaSignOutAlt /> Logout
+          </NavLink>
+        </li>
       </div>
       <div className="flex-1 p-10">
         <Outlet />

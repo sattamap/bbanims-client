@@ -139,7 +139,7 @@ const ManageItems = () => {
 
                 </td>
                 <th>
-                  <div className="flex gap-2 ">
+                  <div className="flex gap-2 justify-center">
                   <button
                       className="btn btn-warning btn-xs"
                       onClick={() => handleDelete(item)}
