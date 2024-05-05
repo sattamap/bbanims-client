@@ -72,6 +72,16 @@ const ManageItems = () => {
     });
   };
 
+  // itemName: data.itemName,
+  // category: category === "Others" ? specificCategory : category,
+  // model: data.model,
+  // origin: data.origin,
+  // condition: data.condition,
+  // location: data.location,
+  // quantity: data.quantity,
+  // date: data.date,
+  // detail: data.detail,
+  // image: res.data.data.display_url,
 
   return (
     <div>
@@ -81,12 +91,11 @@ const ManageItems = () => {
           <thead>
             <tr>
               <th></th>
-              <th>Name, Image, Model <br/>& Country Origin</th>
-              <th>Quantity</th>
-              <th>Date of Receive</th>
-              <th>Detail</th>
-              <th>Location & Condition</th>
-              <th>Action</th>
+              <th><p className="text-center">Name, Image, Model <br/>& Country Origin</p></th>
+              <th><p className="text-center">Quantity</p></th>
+              <th><p className="text-center">Category <br /> & Date of Receive</p></th>
+              <th><p className="text-center">Location <br /> & Condition</p></th>
+              <th><p className="text-center">Action</p></th>
             </tr>
           </thead>
           <tbody>
@@ -107,19 +116,30 @@ const ManageItems = () => {
                     </div>
                   </div>
                 </td>
-                <td>
+                <td className="flex flex-col items-center justify-center">
                   {item?.quantity}
                 </td>
-                <td>{item?.date}</td>
                 <td>
-                  <p className="">{item?.detail}</p>
+                 <div className="flex flex-col items-center">
+                <p className="">{item?.category}</p>
+                <p>{item?.date}</p>
+                 </div>
                 </td>
                 <td>
-                  <p className="">{item?.location}</p>
-                  <p className="">{item?.condition}</p>
+                <div className="flex flex-col gap-2 items-center">
+    <p>{item?.location}</p>
+    <p
+        className={`${
+            item?.condition === "Good" ? "bg-green-300 p-1" : "bg-red-400 p-1 px-2"
+        } p-2 rounded`}
+    >
+        {item?.condition}
+    </p>
+</div>
+
                 </td>
                 <th>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 ">
                   <button
                       className="btn btn-warning btn-xs"
                       onClick={() => handleDelete(item)}
@@ -128,6 +148,9 @@ const ManageItems = () => {
                     </button>
                     <Link to={`/dashboard/updateItem/${item._id}`}>
                       <button className="btn btn-neutral btn-xs">Edit</button>
+                    </Link>
+                    <Link to=''>
+                      <button className="btn btn-neutral btn-xs">Detail</button>
                     </Link>
                   </div>
                 </th>
