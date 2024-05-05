@@ -119,8 +119,8 @@ const ManageItems = () => {
     <p>{item?.location}</p>
     <p
         className={`${
-            item?.condition === "Good" ? "bg-green-300 p-1" : "bg-red-400 p-1 px-2"
-        } p-2 rounded`}
+            item?.condition === "Good" ? "bg-green-300 p-1 " : "bg-red-400 p-1 px-2"
+        } p-2 rounded font-semibold`}
     >
         {item?.condition}
     </p>

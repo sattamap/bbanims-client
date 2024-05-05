@@ -6,6 +6,7 @@ import { FaHome, FaSignOutAlt, FaUsers } from "react-icons/fa";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import { RiUserSharedFill } from "react-icons/ri";
 import { MdEditNote } from "react-icons/md";
+import { BiCategory } from "react-icons/bi";
 
 const Dashboard = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -28,7 +29,7 @@ const Dashboard = () => {
             navigate("/dashboard/allUsers");
             break;
           case "coordinator":
-            navigate("/dashboard/coordinatorHome");
+            navigate("/dashboard/itemsByCategory");
             break;
           case "monitor":
             navigate("/dashboard/items");
@@ -72,9 +73,9 @@ const Dashboard = () => {
                 <NavLink to="/dashboard/allUsers">
                   <FaUsers /> All Users
                 </NavLink>
-                <NavLink to="/dashboard/coordinatorHome">
-                  <FaHome /> Home
-                </NavLink>
+                <NavLink to="/dashboard/itemsByCategory">
+                <BiCategory /> Items By Category
+              </NavLink>
                 <NavLink to="/dashboard/addItems">
                   <MdFormatListBulletedAdd /> Add Items
                 </NavLink>
@@ -88,8 +89,8 @@ const Dashboard = () => {
           {userData?.status === "coordinator" && (
             // Add links specific to the coordinator
             <li>
-              <NavLink to="/dashboard/coordinatorHome">
-                <FaHome /> Home
+              <NavLink to="/dashboard/itemsByCategory">
+                <BiCategory /> Items By Category
               </NavLink>
               <NavLink to="/dashboard/addItems">
                 <MdFormatListBulletedAdd /> Add Items
@@ -102,8 +103,8 @@ const Dashboard = () => {
 
           {userData?.status === "monitor" && (
             <li>
-              <NavLink to="/dashboard/coordinatorHome">
-                <FaHome /> Home
+                <NavLink to="/dashboard/itemsByCategory">
+                <BiCategory /> Items By Category
               </NavLink>
               <NavLink to="/dashboard/items">
                 <RiUserSharedFill /> Items

@@ -12,9 +12,9 @@ import WelcomeMsg from "../pages/Dashboard/NoRole/WelcomeMsg.jsx/WelcomeMsg";
 import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems";
 import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems";
 import CoordinatorHome from "../pages/Dashboard/Coordinator/CoordinatorHome/CoordinatorHome";
-import EquipmentList from "../pages/Dashboard/Common/Components/EquipmentList";
-import SparePartsList from "../pages/Dashboard/Common/Components/SparePartsList";
+
 import Details from "../pages/Dashboard/Common/Components/Details";
+import ItemsByCategory from "../pages/Dashboard/Common/Components/ItemsByCategory";
 
 
 export const router = createBrowserRouter([
@@ -41,15 +41,11 @@ export const router = createBrowserRouter([
 
       // common routes
    
+    
       
       {
-        path: "equipmentList",
-        element: <EquipmentList></EquipmentList>,
-      },
-      
-      {
-        path: "spareParts",
-        element: <SparePartsList></SparePartsList>,
+        path: "itemsByCategory",
+        element: <ItemsByCategory></ItemsByCategory>,
       },
       {
         path: "details/:id",
