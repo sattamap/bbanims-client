@@ -72,17 +72,6 @@ const ManageItems = () => {
     });
   };
 
-  // itemName: data.itemName,
-  // category: category === "Others" ? specificCategory : category,
-  // model: data.model,
-  // origin: data.origin,
-  // condition: data.condition,
-  // location: data.location,
-  // quantity: data.quantity,
-  // date: data.date,
-  // detail: data.detail,
-  // image: res.data.data.display_url,
-
   return (
     <div>
       <div className="overflow-x-auto">
