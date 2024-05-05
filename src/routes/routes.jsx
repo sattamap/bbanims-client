@@ -14,6 +14,7 @@ import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems"
 import CoordinatorHome from "../pages/Dashboard/Coordinator/CoordinatorHome/CoordinatorHome";
 import EquipmentList from "../pages/Dashboard/Common/Components/EquipmentList";
 import SparePartsList from "../pages/Dashboard/Common/Components/SparePartsList";
+import Details from "../pages/Dashboard/Common/Components/Details";
 
 
 export const router = createBrowserRouter([
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
       {
         path: "spareParts",
         element: <SparePartsList></SparePartsList>,
+      },
+      {
+        path: "details",
+        element: <Details></Details>,
       },
 
 
