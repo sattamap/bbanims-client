@@ -203,7 +203,7 @@ const ManageItems = () => {
                 <select
                     value={selectedCondition}
                     onChange={(e) => setSelectedCondition(e.target.value)}
-                    className="input input-bordered w-32"
+                    className="input input-bordered w-36"
                 >
                     <option value="">All Conditions</option>
                     <option value="Good">Good</option>
