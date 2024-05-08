@@ -14,6 +14,7 @@ import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems"
 import Details from "../pages/Dashboard/Common/Components/Details";
 import ItemsByCategory from "../pages/Dashboard/Common/Components/ItemsByCategory";
 import Home from "../pages/Dashboard/Common/Home/Home";
+import Contact from "../pages/Login/Contact";
 
 
 export const router = createBrowserRouter([
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
         {
             path:"register",
             element:<Register></Register>,
+        },
+        {
+            path:"contact",
+            element:<Contact></Contact>,
         },
     ]
   },

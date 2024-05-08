@@ -29,10 +29,10 @@ const Dashboard = () => {
             navigate("/dashboard/allUsers");
             break;
           case "coordinator":
-            navigate("/dashboard/itemsByCategory");
+            navigate("/dashboard/home");
             break;
           case "monitor":
-            navigate("/dashboard/items");
+            navigate("/dashboard/home");
             break;
           case "none":
           default:
@@ -70,6 +70,9 @@ const Dashboard = () => {
           {userData?.status === "admin" && (
             <>
               <li>
+              <NavLink to="/dashboard/home">
+                <FaHome /> Home
+              </NavLink>
                 <NavLink to="/dashboard/allUsers">
                   <FaUsers /> All Users
                 </NavLink>
@@ -106,6 +109,9 @@ const Dashboard = () => {
 
           {userData?.status === "monitor" && (
             <li>
+                 <NavLink to="/dashboard/home">
+                <FaHome /> Home
+              </NavLink>
                 <NavLink to="/dashboard/itemsByCategory">
                 <BiCategory /> Items By Category
               </NavLink>
