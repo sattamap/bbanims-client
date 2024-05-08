@@ -18,7 +18,6 @@ const ManageItems = () => {
             try {
                 const response = await axiosPublic.get('/items');
                 setItems(response.data);
-                setTotalItems(response.data.length);
             } catch (error) {
                 console.error('Error fetching items:', error);
             }
@@ -43,7 +42,6 @@ const ManageItems = () => {
                     if (response.status === 200) {
                         // Remove the deleted item from the state
                         setItems((prevItems) => prevItems.filter((i) => i._id !== item._id));
-                        setTotalItems((prevTotal) => prevTotal - 1);
                         Swal.fire({
                             position: "top-end",
                             icon: "success",
@@ -71,17 +69,23 @@ const ManageItems = () => {
         });
     };
 
-    // Calculate paginated items
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedItems = items.slice(startIndex, endIndex);
-
     // Filter items based on search term and selected condition
-    const filteredItems = paginatedItems.filter((item) => {
+    const filteredItems = items.filter((item) => {
         const matchesName = item.itemName.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCondition = selectedCondition === "" || item.condition === selectedCondition;
         return matchesName && matchesCondition;
     });
+
+    // Calculate the total number of filtered items
+    const totalFilteredItems = filteredItems.length;
+
+    // Calculate the total number of pages based on the filtered items and items per page
+    const numberOfPages = Math.ceil(totalFilteredItems / itemsPerPage);
+
+    // Calculate paginated items
+    const startIndex = currentPage * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalFilteredItems);
+    const paginatedItems = filteredItems.slice(startIndex, endIndex);
 
     // Update the current page when search term or selected condition changes
     useEffect(() => {
@@ -98,9 +102,6 @@ const ManageItems = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
-    // Calculate the total number of pages
-    const numberOfPages = Math.ceil(totalItems / itemsPerPage);
 
     // Rendering page numbers
     const renderPageNumbers = () => {
@@ -224,7 +225,7 @@ const ManageItems = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredItems.map((item, index) => (
+                        {paginatedItems.map((item, index) => (
                             <tr key={item._id}>
                                 <td>{startIndex + index + 1}.</td>
                                 <td>
