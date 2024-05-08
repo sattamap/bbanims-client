@@ -40,7 +40,7 @@ const Contact = () => {
                 <div className='w-full'><p className='text-xs md:text-base'>+880-185-8271527</p></div>
                </div>
             </div>
-            <Link to="/dashboard" className="block text-blue-500 hover:underline mt-4">&larr; Back to Dashboard</Link> {/* Add Link component for back to dashboard */}
+            <Link to="/" className="block text-blue-500 hover:underline mt-4">&larr; Back to Login Page</Link> {/* Add Link component for back to dashboard */}
     </div>
     <div className="card  shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
     <form ref={form} onSubmit={sendEmail} className="card-body">
