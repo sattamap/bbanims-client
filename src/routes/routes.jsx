@@ -15,6 +15,7 @@ import Details from "../pages/Dashboard/Common/Components/Details";
 import ItemsByCategory from "../pages/Dashboard/Common/Components/ItemsByCategory";
 import Home from "../pages/Dashboard/Common/Home/Home";
 import Contact from "../pages/Login/Contact";
+import AboutIMS from "../pages/Login/AboutIMS";
 
 
 export const router = createBrowserRouter([
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
         {
             path:"contact",
             element:<Contact></Contact>,
+        },
+        {
+            path:"about",
+            element:<AboutIMS></AboutIMS>,
         },
     ]
   },
