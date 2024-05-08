@@ -89,6 +89,9 @@ const Dashboard = () => {
           {userData?.status === "coordinator" && (
             // Add links specific to the coordinator
             <li>
+              <NavLink to="/dashboard/home">
+                <FaHome /> Home
+              </NavLink>
               <NavLink to="/dashboard/itemsByCategory">
                 <BiCategory /> Items By Category
               </NavLink>
