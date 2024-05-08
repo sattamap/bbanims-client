@@ -190,11 +190,11 @@ const ItemsByCategory = () => {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name, Image, Model, & Origin</th>
-                            <th>Quantity</th>
-                            <th>Category & Date</th>
-                            <th>Location & Condition</th>
-                            <th>Action</th>
+                            <th><p className=''>Name, Image, Model, & Origin</p></th>
+                            <th><p className='text-center'>Quantity</p></th>
+                            <th><p className='text-center'>Category & Date</p></th>
+                            <th><p className='text-center'>Location & Condition</p></th>
+                            <th><p className='text-center'>Action</p></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -215,9 +215,9 @@ const ItemsByCategory = () => {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{item?.quantity}</td>
+                                <td><p className='text-center'>{item?.quantity}</p></td>
                                 <td>
-                                    <div className="flex flex-col items-center">
+                                    <div className="text-center">
                                         <p>{item?.category}</p>
                                         <p>{item?.date}</p>
                                     </div>
