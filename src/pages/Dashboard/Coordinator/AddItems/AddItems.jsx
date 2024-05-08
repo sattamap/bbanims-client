@@ -22,15 +22,37 @@ const AddItems = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-    const imageFile = { image: data.image[0] };
-    const res = await axiosPublic.post(image_hosting_api, imageFile, {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    });
+    let imageUrl = "";
 
-    if (res.data.success) {
-      const item = {
+    // Check if an image file is provided
+    if (data.image && data.image[0]) {
+        const formData = new FormData();
+        formData.append("image", data.image[0]);
+
+        try {
+            const response = await axiosPublic.post(image_hosting_api, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            if (response.data.success) {
+                imageUrl = response.data.data.display_url;
+            } else {
+                console.error("Image upload failed:", response.data);
+                // Handle image upload failure (e.g., show a notification)
+            }
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            // Handle error (e.g., show a notification)
+        }
+    } else {
+        console.log("No image file selected.");
+        // Handle the case where no image is selected
+    }
+
+    // Create the item object
+    const item = {
         itemName: data.itemName,
         category: category === "Others" ? specificCategory : category,
         model: data.model,
@@ -40,24 +62,26 @@ const AddItems = () => {
         quantity: data.quantity,
         date: data.date,
         detail: data.detail,
-        image: res.data.data.display_url,
-      };
+        image: imageUrl, // Use the image URL if available, otherwise empty string
+    };
 
-      const result = await axiosPublic.post("/item", item);
-      console.log(result.data);
-      if (result.data.insertedId) {
-        // Show success popup
-        reset();
+    // Save the item in your database
+    const result = await axiosPublic.post("/item", item);
+    console.log(result.data);
+
+    if (result.data.insertedId) {
+        reset(); // Reset the form
+
         Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${data.itemName} has been added to the inventory.`,
-          showConfirmButton: false,
-          timer: 1500,
+            position: "top-end",
+            icon: "success",
+            title: `${data.itemName} has been added to the inventory.`,
+            showConfirmButton: false,
+            timer: 1500,
         });
-      }
     }
-  };
+};
+
 
   return (
     <div className="w-full mx-auto bg-white p-4 my-10 rounded-md shadow-xl md:w-4/5 lg:w-full xl:w-full">
@@ -131,15 +155,16 @@ const AddItems = () => {
         <div className="flex flex-col lg:flex-row gap-6 mb-6">
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Condition of Item</span>
+              <span className="label-text">Condition of Items</span>
             </label>
-            <input
-              type="text"
-              placeholder="e.g. Good/Bad "
+            <select
               {...register("condition", { required: true })}
-              required
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
-            />
+              required
+            >
+              <option value="Good">Good</option>
+              <option value="Bad">Bad</option>
+            </select>
           </div>
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -147,13 +172,14 @@ const AddItems = () => {
             </label>
             <input
               type="text"
-              placeholder="e.g. At Store/FM Room "
+              placeholder="e.g. At Store/FM Room"
               {...register("location", { required: true })}
               required
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
             />
           </div>
         </div>
+
         <div className="flex flex-col lg:flex-row gap-6 mb-6">
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -177,7 +203,7 @@ const AddItems = () => {
             <input
               type="date"
               id="receive"
-              {...register("date")}
+              {...register("date",{})}
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
             />
           </div>
@@ -210,7 +236,7 @@ const AddItems = () => {
             <input
               type="file"
               id="image"
-              {...register("image", { required: true })}
+              {...register("image", { })}
               className="border rounded w-full py-[6px] px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
