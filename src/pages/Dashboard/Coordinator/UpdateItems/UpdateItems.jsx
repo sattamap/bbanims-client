@@ -14,10 +14,10 @@ const UpdateItems = () => {
 
     const axiosPublic = useAxiosPublic();
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-     // Initialize state variables
-     const [userSelectedCategory, setUserSelectedCategory] = useState(category === "Equipment" || category === "SpareParts" ? category : "Others");
-     const [specificCategory, setSpecificCategory] = useState(category);
- 
+    // Initialize state variables
+    const [userSelectedCategory, setUserSelectedCategory] = useState(category === "Equipment" || category === "SpareParts" ? category : "Others");
+    const [specificCategory, setSpecificCategory] = useState(category);
+
     // Monitor the selected category using the watch function
     const selectedCategory = watch("category");
     console.log(category);
@@ -29,43 +29,68 @@ const UpdateItems = () => {
 
     const onSubmit = async (data) => {
         console.log(data);
-        const imageFile = { image: data.image[0] }
-        const res = await axiosPublic.post(image_hosting_api, imageFile, {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        });
+        let imageUrl = ""; // Initialize the image URL as an empty string
 
-        if (res.data.success) {
-            const item = {
+        // Check if an image file is provided before attempting to upload
+        if (data.image && data.image[0]) {
+            // Create a FormData object and append the image file
+            const formData = new FormData();
+            formData.append("image", data.image[0]);
 
-                itemName: data.itemName,
-                category: category === "Others" ? specificCategory : userSelectedCategory,
-                model: data.model,
-                origin: data.origin,
-                condition: data.condition,
-                location: data.location,
-                quantity: data.quantity,
-                date: data.date,
-                detail: data.detail,
-                image: res.data.data.display_url,
-
-            }
-            // 
-            const itemResult = await axiosPublic.patch(`/items/${_id}`, item);
-            if (itemResult.data.modifiedCount > 0) {
-                // show success popup
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: `${data.itemName} is updated to the menu.`,
-                    showConfirmButton: false,
-                    timer: 1500
+            try {
+                // Make a POST request to upload the image
+                const res = await axiosPublic.post(image_hosting_api, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 });
+
+                // Check if the image upload was successful
+                if (res.data.success) {
+                    // Get the image URL from the response data
+                    imageUrl = res.data.data.display_url;
+                } else {
+                    console.error("Image upload failed:", res.data);
+                    // Handle image upload failure (e.g., show a notification)
+                }
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                // Handle error (e.g., show a notification)
             }
+        } else {
+            console.log("No image file selected.");
+            // Handle the case where no image is selected
         }
 
+        // Create the item object
+        const item = {
+            itemName: data.itemName,
+            category: userSelectedCategory === "Others" ? specificCategory : userSelectedCategory,
+            model: data.model,
+            origin: data.origin,
+            condition: data.condition,
+            location: data.location,
+            quantity: data.quantity,
+            date: data.date,
+            detail: data.detail,
+            // If an image URL was successfully obtained, use it; otherwise, retain the existing image URL
+            image: imageUrl || undefined, // Set to undefined if imageUrl is empty
+        };
+
+        // Make a PATCH request to update the item in the database
+        const itemResult = await axiosPublic.patch(`/items/${_id}`, item);
+        if (itemResult.data.modifiedCount > 0) {
+            // Show success popup
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: `${data.itemName} has been updated.`,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
     };
+
 
 
     return (
@@ -152,14 +177,14 @@ const UpdateItems = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Condition of Item</span>
                         </label>
-                        <input
-                            type="text"
-                            defaultValue={condition}
-                            placeholder="e.g. Good/Bad "
+                        <select
                             {...register("condition", { required: true })}
-                            required
                             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
-                        />
+                            required
+                        >
+                            <option value="Good">Good</option>
+                            <option value="Bad">Bad</option>
+                        </select>
                     </div>
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -224,15 +249,9 @@ const UpdateItems = () => {
                         <input
                             type="file"
                             id="image"
-                            {...register('image', { required: true })}
+                            {...register('image')}
                             className="border rounded w-full py-[6px] px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
-                        <p className="text-teal-600 text-xs mt-1">
-                            ** Image must be required. Please choose your image.
-                        </p>
-                        {errors.image && (
-                            <p className="text-red-500 text-xs font-semibold mt-1">Image is required. Please choose your image.</p>
-                        )}
                     </div>
                 </div>
                 <div className="flex justify-center">
