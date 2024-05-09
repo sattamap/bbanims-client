@@ -97,7 +97,7 @@ const Login = () => {
           <div className="text-center md:text-left mb-8">
             <h4 className="text-4xl font-bold mb-4 text-emerald-800">Welcome Back!</h4>
             <p className="text-base">
-              Log in to manage and  access operations.
+              Log in to manage items and  access operations.
             </p>
           </div>
           <div>
@@ -117,7 +117,7 @@ const Login = () => {
                 <div className="relative">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
                   <input
-                    type='password'
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
                     name="password"
                     {...register('password', { required: true })}

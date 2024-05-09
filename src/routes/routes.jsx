@@ -16,6 +16,7 @@ import ItemsByCategory from "../pages/Dashboard/Common/Components/ItemsByCategor
 import Home from "../pages/Dashboard/Common/Home/Home";
 import Contact from "../pages/Login/Contact";
 import AboutIMS from "../pages/Login/AboutIMS";
+import PrivateRoutes from "./PrivateRoutes";
 
 
 export const router = createBrowserRouter([
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <Dashboard></Dashboard>,
+    element: <PrivateRoutes><Dashboard></Dashboard></PrivateRoutes>,
     children: [
 
 
@@ -87,7 +88,7 @@ export const router = createBrowserRouter([
       {
         path: 'updateItem/:id',
         element:<UpdateItems></UpdateItems>,
-        loader: ({params})=> fetch(`http://localhost:5000/item/${params.id}`)
+        loader: ({params})=> fetch(`https://bbanims-server.vercel.app/item/${params.id}`)
 
       },
 
