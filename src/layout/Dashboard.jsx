@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const axiosPublic = useAxiosPublic();
 
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -64,7 +65,13 @@ const Dashboard = () => {
             alt="Profile"
             className="w-20 h-20 rounded-full mr-2"
           />
-          <span className="text-white">{user?.displayName}</span>
+          <span className="text-white text-md font-bold">{user?.displayName}</span>
+          <span className="text-purple-950 text-sm font-medium">{userData?.designation}</span>
+          <span className="text-white text-sm font-medium bg-gradient-to-r from-fuchsia-600 hover:from-pink-500 hover:to-violet-400 p-1 shadow-lg rounded-lg">
+  Current Role: <span className="text-slate-950">{userData?.status}</span>
+</span>
+
+
         </div>
         <ul className="menu p-4">
           {userData?.status === "admin" && (
