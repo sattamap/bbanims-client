@@ -98,7 +98,7 @@ const Login = () => {
             <div className="absolute inset-0 bg-center lg:bg-cover  bg-no-repeat" style={{ backgroundImage: `url(${logo})`, opacity: '0.3', borderRadius: '5px' }}></div>
 
             {/* Text content */}
-            <div className="relative z-10 text-center  my-28 lg:my-0">
+            <div className="relative z-10 text-center  my-32 lg:my-0">
               <h4 className="text-4xl font-bold  text-emerald-800">Welcome Back!</h4>
               <p className="text-base font-semibold">Log in to manage items and access operations.</p>
             </div>
