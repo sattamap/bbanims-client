@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import useAxiosPublic from "../../../../hooks/useAxiosPublic";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+
 
 const ManageItems = () => {
     const axiosPublic = useAxiosPublic();
@@ -10,7 +14,9 @@ const ManageItems = () => {
     const [selectedCondition, setSelectedCondition] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(5);
-    const [totalItems, setTotalItems] = useState(0);
+    const [filterApplied, setFilterApplied] = useState(false); // Track if filtering has been applied
+
+
 
     // Fetch items from the API
     useEffect(() => {
@@ -188,19 +194,67 @@ const ManageItems = () => {
         );
     };
 
+
+    // Function to generate and download PDF
+    const handleDownloadPDF = () => {
+        const doc = new jsPDF();
+        const tableData = items.map((item,index) => [startIndex + index + 1,item.itemName, item.model, item.origin, item.quantity, item.category, item.date, item.location, item.condition]);
+
+        doc.autoTable({
+            head: [['#','Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']],
+            body: tableData,
+        });
+
+        doc.save('items.pdf');
+    };
+
+    // Function to generate and download PDF for filtered items
+const handleDownloadFilteredPDF = () => {
+    const doc = new jsPDF();
+    const tableData = filteredItems.map((item, index) => [
+        startIndex + index + 1,
+        item.itemName,
+        item.model,
+        item.origin,
+        item.quantity,
+        item.category,
+        item.date,
+        item.location,
+        item.condition,
+    ]);
+
+    doc.autoTable({
+        head: [
+            ['#', 'Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']
+        ],
+        body: tableData,
+    });
+
+    doc.save('filtered_items.pdf');
+};
+ // Update filterApplied when searchTerm or selectedCondition changes
+ useEffect(() => {
+    setFilterApplied(searchTerm !== "" || selectedCondition !== "");
+}, [searchTerm, selectedCondition]);
+
+// Enable or disable the "Download Filtered PDF" button based on whether there are filtered items
+const isFiltered = filteredItems.length > 0 && filterApplied; // Check if filtering has been applied
+
     return (
         <div>
             {/* Search and filter section */}
-            <div className="mb-4 flex justify-between">
+            <div className="mb-4">
                 <input
                     type="text"
                     placeholder="Search by item name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="input input-bordered w-full mr-2"
+                    className="input input-bordered w-full mr-2 mb-4"
                 />
 
-                <select
+         <div className="flex gap-4 lg:gap-40 items-center">
+         <div>
+         <select
                     value={selectedCondition}
                     onChange={(e) => setSelectedCondition(e.target.value)}
                     className="input input-bordered w-36"
@@ -209,14 +263,22 @@ const ManageItems = () => {
                     <option value="Good">Good</option>
                     <option value="Bad">Bad</option>
                 </select>
+         </div>
+
+                <div className="border-l-4 border-emerald-900 pl-4 lg:pl-20">
+           <button onClick={handleDownloadPDF} className="btn btn-sm bg-teal-300 mr-2">Download PDF</button>
+            <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-sm text-white mr-2`}>Download Filtered PDF</button>
+
+           </div>
             </div>
+         </div>
 
             {/* Table for displaying items */}
             <div className="overflow-x-auto">
                 <table className="table table-xs">
                     <thead>
                         <tr>
-                        <th>#</th>
+                            <th>#</th>
                             <th><p className=''>Name, Image, Model, & Origin</p></th>
                             <th><p className='text-center'>Quantity</p></th>
                             <th><p className='text-center'>Category & Date</p></th>
@@ -253,9 +315,8 @@ const ManageItems = () => {
                                     <div className="flex flex-col items-center">
                                         <p>{item?.location}</p>
                                         <p
-                                            className={`${
-                                                item?.condition === "Good" ? "bg-green-300 p-1 rounded" : "bg-red-400 p-1 px-2 rounded"
-                                            }`}
+                                            className={`${item?.condition === "Good" ? "bg-green-300 p-1 rounded" : "bg-red-400 p-1 px-2 rounded"
+                                                }`}
                                         >
                                             {item?.condition}
                                         </p>
@@ -300,6 +361,7 @@ const ManageItems = () => {
                     {renderPageNumbers()}
                 </nav>
             </div>
+           
         </div>
     );
 };

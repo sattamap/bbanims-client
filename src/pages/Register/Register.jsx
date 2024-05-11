@@ -106,7 +106,7 @@ const Register = () => {
         <div className='p-4'>
           <h1 className="text-4xl font-bold mb-4">Create an Account</h1>
           <p className="text-base text-gray-700">
-            Join the Gate Pass Management System and streamline your gate access operations. 
+            Join the Inventory Management System and to manage items and  access operations.
           </p>
         </div>
         <div className="w-5/6 mx-auto bg-white p-3 my-3 rounded-md shadow-xl md:w-4/5 lg:w-full xl:w-full">
