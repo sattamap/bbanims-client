@@ -121,9 +121,9 @@ const handleSeeInfo = (user) => {
  
   return (
     <div>
-      <div className="flex justify-evenly bg-emerald-800 p-10 rounded-xl">
+      <div className="flex flex-col lg:flex-row justify-evenly text-center bg-emerald-800 p-10 rounded-xl">
         <h2 className="text-2xl text-slate-100 font-extrabold">All Users</h2>
-        <h2 className="text-2xl text-slate-100 font-extrabold">Total users: {users.length}</h2>
+        <h2 className="text-2xl text-slate-100 font-extrabold">Total users : <span className="bg-lime-300 text- px-2 rounded-sm text-rose-950">{users.length}</span></h2>
       </div>
       <div className="overflow-x-auto px-20">
         <table className="table table-xs table-zebra mt-10 ">

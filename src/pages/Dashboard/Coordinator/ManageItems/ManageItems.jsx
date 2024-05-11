@@ -266,8 +266,8 @@ const isFiltered = filteredItems.length > 0 && filterApplied; // Check if filter
          </div>
 
                 <div className="border-l-4 border-emerald-900 pl-4 lg:pl-20">
-           <button onClick={handleDownloadPDF} className="btn btn-sm bg-teal-300 mr-2">Download PDF</button>
-            <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-sm text-white mr-2`}>Download Filtered PDF</button>
+           <button onClick={handleDownloadPDF} className="btn btn-xs  lg:btn-sm bg-teal-300 mr-2">Download PDF</button>
+            <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs lg:btn-sm  text-white mr-2`}>Download Filtered PDF</button>
 
            </div>
             </div>
