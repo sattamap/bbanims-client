@@ -88,21 +88,21 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-emerald-400">
       <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md">
-      <div className='flex items-center justify-center text-xl font-bold bg-gradient-to-r from-purple-300 via-purple-400 to-purple-600 rounded-xl shadow-xl mb-5 p-4'>
-  <h2 className="ml-2">Inventory Management System of Engineering Section of Bangladesh Betar, Bandarban</h2>
-</div>
+        <div className='flex items-center justify-center text-xl font-bold bg-gradient-to-r from-purple-300 via-purple-400 to-purple-600 rounded-xl shadow-xl mb-5 p-4'>
+          <h2 className="ml-2">Inventory Management System of Engineering Section of Bangladesh Betar, Bandarban</h2>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" >
-        <div className="relative mb-8">
-  {/* Background image with overlay */}
-  <div className="absolute inset-0 bg-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${logo})`, opacity: '0.3', borderRadius: '5px' }}></div>
-  
-  {/* Text content */}
-  <div className="relative z-10 text-center md:text-left">
-    <h4 className="text-4xl font-bold mb-4 text-emerald-800">Welcome Back!</h4>
-    <p className="text-base font-semibold">Log in to manage items and access operations.</p>
-  </div>
-</div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" >
+          <div className="relative  mb-8">
+            {/* Background image with overlay */}
+            <div className="absolute inset-0 bg-center lg:bg-cover  bg-no-repeat" style={{ backgroundImage: `url(${logo})`, opacity: '0.3', borderRadius: '5px' }}></div>
+
+            {/* Text content */}
+            <div className="relative z-10 text-center  my-28 lg:my-0">
+              <h4 className="text-4xl font-bold  text-emerald-800">Welcome Back!</h4>
+              <p className="text-base font-semibold">Log in to manage items and access operations.</p>
+            </div>
+          </div>
 
           <div className="">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -160,7 +160,7 @@ const Login = () => {
             </p>
           </div>
         </div>
-        
+
         <div className='space-y-4'>
           <div className="flex justify-center gap-4 mt-8">
             <Link to="/contact" className="text-sm font-medium text-indigo-900 hover:underline border-r-2 border-black pr-4">Contact</Link>
