@@ -2,9 +2,8 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import useAxiosPublic from "../hooks/useAxiosPublic";
-import { FaHome, FaSignOutAlt, FaUsers } from "react-icons/fa";
+import { FaHome, FaSignOutAlt, FaSitemap, FaUsers } from "react-icons/fa";
 import { MdFormatListBulletedAdd } from "react-icons/md";
-import { RiUserSharedFill } from "react-icons/ri";
 import { MdEditNote } from "react-icons/md";
 
 
@@ -68,8 +67,8 @@ const Dashboard = () => {
           <span className="text-white text-md font-bold">{user?.displayName}</span>
           <span className="text-purple-950 text-sm font-medium">{userData?.designation}</span>
           <span className="text-white text-sm font-medium bg-gradient-to-r from-fuchsia-600 hover:from-pink-500 hover:to-violet-400 p-1 shadow-lg rounded-lg">
-  Current Role: <span className="text-slate-950">{userData?.status}</span>
-</span>
+            Current Role: <span className="text-slate-950">{userData?.status}</span>
+          </span>
 
 
         </div>
@@ -77,9 +76,9 @@ const Dashboard = () => {
           {userData?.status === "admin" && (
             <>
               <li>
-              <NavLink to="/dashboard/home">
-                <FaHome /> Home
-              </NavLink>
+                <NavLink to="/dashboard/home">
+                  <FaHome /> Home
+                </NavLink>
                 <NavLink to="/dashboard/allUsers">
                   <FaUsers /> All Users
                 </NavLink>
@@ -110,11 +109,11 @@ const Dashboard = () => {
 
           {userData?.status === "monitor" && (
             <li>
-                 <NavLink to="/dashboard/home">
+              <NavLink to="/dashboard/home">
                 <FaHome /> Home
               </NavLink>
               <NavLink to="/dashboard/items">
-                <RiUserSharedFill /> Items
+                <FaSitemap /> Items
               </NavLink>
             </li>
           )}
