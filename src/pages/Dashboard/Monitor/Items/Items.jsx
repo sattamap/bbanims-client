@@ -22,6 +22,8 @@ const Items = () => {
     fetchItems();
   }, [axiosPublic]);
 
+  
+
 
   return (
     <div>

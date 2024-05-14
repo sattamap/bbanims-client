@@ -12,6 +12,8 @@ const ManageItems = () => {
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCondition, setSelectedCondition] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [allCategories, setAllCategories] = useState([]); // State to hold all categories
     const [currentPage, setCurrentPage] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [filterApplied, setFilterApplied] = useState(false); // Track if filtering has been applied
@@ -24,6 +26,11 @@ const ManageItems = () => {
             try {
                 const response = await axiosPublic.get('/items');
                 setItems(response.data);
+
+                // Get all available categories from the items
+                const categories = [...new Set(response.data.map(item => item.category))];
+                setAllCategories(categories);
+
             } catch (error) {
                 console.error('Error fetching items:', error);
             }
@@ -79,7 +86,8 @@ const ManageItems = () => {
     const filteredItems = items.filter((item) => {
         const matchesName = item.itemName.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCondition = selectedCondition === "" || item.condition === selectedCondition;
-        return matchesName && matchesCondition;
+        const matchesCategory = selectedCategory === "" || item.category === selectedCategory; // Add category filter
+        return matchesName && matchesCondition && matchesCategory;
     });
 
     // Calculate the total number of filtered items
@@ -198,10 +206,10 @@ const ManageItems = () => {
     // Function to generate and download PDF
     const handleDownloadPDF = () => {
         const doc = new jsPDF();
-        const tableData = items.map((item,index) => [startIndex + index + 1,item.itemName, item.model, item.origin, item.quantity, item.category, item.date, item.location, item.condition]);
+        const tableData = items.map((item, index) => [startIndex + index + 1, item.itemName, item.model, item.origin, item.quantity, item.category, item.date, item.location, item.condition]);
 
         doc.autoTable({
-            head: [['#','Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']],
+            head: [['#', 'Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']],
             body: tableData,
         });
 
@@ -209,36 +217,36 @@ const ManageItems = () => {
     };
 
     // Function to generate and download PDF for filtered items
-const handleDownloadFilteredPDF = () => {
-    const doc = new jsPDF();
-    const tableData = filteredItems.map((item, index) => [
-        startIndex + index + 1,
-        item.itemName,
-        item.model,
-        item.origin,
-        item.quantity,
-        item.category,
-        item.date,
-        item.location,
-        item.condition,
-    ]);
+    const handleDownloadFilteredPDF = () => {
+        const doc = new jsPDF();
+        const tableData = filteredItems.map((item, index) => [
+            startIndex + index + 1,
+            item.itemName,
+            item.model,
+            item.origin,
+            item.quantity,
+            item.category,
+            item.date,
+            item.location,
+            item.condition,
+        ]);
 
-    doc.autoTable({
-        head: [
-            ['#', 'Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']
-        ],
-        body: tableData,
-    });
+        doc.autoTable({
+            head: [
+                ['#', 'Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']
+            ],
+            body: tableData,
+        });
 
-    doc.save('filtered_items.pdf');
-};
- // Update filterApplied when searchTerm or selectedCondition changes
- useEffect(() => {
-    setFilterApplied(searchTerm !== "" || selectedCondition !== "");
-}, [searchTerm, selectedCondition]);
+        doc.save('filtered_items.pdf');
+    };
+    // Update filterApplied when searchTerm or selectedCondition changes
+    useEffect(() => {
+        setFilterApplied(searchTerm !== "" || selectedCondition !== "" || selectedCategory !== ""); // Update filterApplied state
+    }, [searchTerm, selectedCondition, selectedCategory]);
 
-// Enable or disable the "Download Filtered PDF" button based on whether there are filtered items
-const isFiltered = filteredItems.length > 0 && filterApplied; // Check if filtering has been applied
+    const isFiltered = filteredItems.length > 0 && filterApplied;
+
 
     return (
         <div>
@@ -251,27 +259,42 @@ const isFiltered = filteredItems.length > 0 && filterApplied; // Check if filter
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="input input-bordered w-full mr-2 mb-4"
                 />
+               
 
-         <div className="flex gap-4 lg:gap-40 items-center">
-         <div>
-         <select
-                    value={selectedCondition}
-                    onChange={(e) => setSelectedCondition(e.target.value)}
-                    className="input input-bordered w-36"
-                >
-                    <option value="">All Conditions</option>
-                    <option value="Good">Good</option>
-                    <option value="Bad">Bad</option>
-                </select>
-         </div>
+               <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
+    
+    <div className="mb-4 md:mb-0">
+        <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="input input-bordered w-full md:w-36"
+        >
+            <option value="">All Categories</option>
+            {allCategories.map((category, index) => (
+                <option key={index} value={category}>{category}</option>
+            ))}
+        </select>
+    </div>
+    <div className="mb-4 md:mb-0">
+        <select
+            value={selectedCondition}
+            onChange={(e) => setSelectedCondition(e.target.value)}
+            className="input input-bordered w-full md:w-36"
+        >
+            <option value="">All Conditions</option>
+            <option value="Good">Good</option>
+            <option value="Bad">Bad</option>
+        </select>
+    </div>
 
-                <div className="border-l-4 border-emerald-900 pl-4 lg:pl-20">
-           <button onClick={handleDownloadPDF} className="btn btn-xs  lg:btn-sm bg-teal-300 mr-2">Download PDF</button>
-            <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs lg:btn-sm  text-white mr-2`}>Download Filtered PDF</button>
 
-           </div>
+    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:border-l-4 md: border-emerald-900">
+        <button onClick={handleDownloadPDF} className="btn btn-xs bg-teal-300 md:btn-sm md:ml-3">Download PDF</button>
+        <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs md:btn-sm  text-white`}>Download Filtered PDF</button>
+    </div>
+</div>
+
             </div>
-         </div>
 
             {/* Table for displaying items */}
             <div className="overflow-x-auto">
@@ -361,7 +384,7 @@ const isFiltered = filteredItems.length > 0 && filterApplied; // Check if filter
                     {renderPageNumbers()}
                 </nav>
             </div>
-           
+
         </div>
     );
 };
