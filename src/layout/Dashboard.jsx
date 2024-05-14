@@ -6,7 +6,7 @@ import { FaHome, FaSignOutAlt, FaUsers } from "react-icons/fa";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import { RiUserSharedFill } from "react-icons/ri";
 import { MdEditNote } from "react-icons/md";
-import { BiCategory } from "react-icons/bi";
+
 
 const Dashboard = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -83,9 +83,6 @@ const Dashboard = () => {
                 <NavLink to="/dashboard/allUsers">
                   <FaUsers /> All Users
                 </NavLink>
-                <NavLink to="/dashboard/itemsByCategory">
-                <BiCategory /> Items By Category
-              </NavLink>
                 <NavLink to="/dashboard/addItems">
                   <MdFormatListBulletedAdd /> Add Items
                 </NavLink>
@@ -102,9 +99,6 @@ const Dashboard = () => {
               <NavLink to="/dashboard/home">
                 <FaHome /> Home
               </NavLink>
-              <NavLink to="/dashboard/itemsByCategory">
-                <BiCategory /> Items By Category
-              </NavLink>
               <NavLink to="/dashboard/addItems">
                 <MdFormatListBulletedAdd /> Add Items
               </NavLink>
@@ -118,9 +112,6 @@ const Dashboard = () => {
             <li>
                  <NavLink to="/dashboard/home">
                 <FaHome /> Home
-              </NavLink>
-                <NavLink to="/dashboard/itemsByCategory">
-                <BiCategory /> Items By Category
               </NavLink>
               <NavLink to="/dashboard/items">
                 <RiUserSharedFill /> Items
