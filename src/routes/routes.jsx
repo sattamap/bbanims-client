@@ -12,7 +12,6 @@ import WelcomeMsg from "../pages/Dashboard/NoRole/WelcomeMsg.jsx/WelcomeMsg";
 import ManageItems from "../pages/Dashboard/Coordinator/ManageItems/ManageItems";
 import UpdateItems from "../pages/Dashboard/Coordinator/UpdateItems/UpdateItems";
 import Details from "../pages/Dashboard/Common/Components/Details";
-import ItemsByCategory from "../pages/Dashboard/Common/Components/ItemsByCategory";
 import Home from "../pages/Dashboard/Common/Home/Home";
 import Contact from "../pages/Login/Contact";
 import AboutIMS from "../pages/Login/AboutIMS";
@@ -56,10 +55,6 @@ export const router = createBrowserRouter([
       {
         path: "home",
         element:<Home></Home>,
-      },
-      {
-        path: "itemsByCategory",
-        element: <ItemsByCategory></ItemsByCategory>,
       },
       {
         path: "details/:id",
