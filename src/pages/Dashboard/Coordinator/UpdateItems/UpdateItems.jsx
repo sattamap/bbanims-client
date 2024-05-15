@@ -20,7 +20,8 @@ const UpdateItems = () => {
 
     // Monitor the selected category using the watch function
     const selectedCategory = watch("category");
-    console.log(category);
+
+
     useEffect(() => {
         // Update the userSelectedCategory state variable when the selected category changes
         setUserSelectedCategory(selectedCategory);
@@ -100,15 +101,20 @@ const UpdateItems = () => {
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Name of the Item</span>
+                            <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
                         </label>
-                        <input type="text" defaultValue={itemName} placeholder="e.g. Module" {...register("itemName", { required: true })} required
+                        <input type="text" defaultValue={itemName} placeholder="e.g. Module" {...register("itemName", { required: true })}
                             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
                         />
+                        {errors.itemName && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">This field is required</p>
+                        )}
 
                     </div>
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Category</span>
+                            <span className="text-red-500 text-lg ml-2">*</span>
                         </label>
                         <select
                             {...register("category", { required: true })}
@@ -130,17 +136,23 @@ const UpdateItems = () => {
                             <option value="Others">Others</option>
                         </select>
 
+
                         {/* Conditionally render specific category input based on selection */}
                         {userSelectedCategory === "Others" && (
                             <div className="mt-2">
                                 <input
                                     type="text"
+                                    {...register("specificCategory", { required: true })}
                                     defaultValue={category}
                                     placeholder="Specify the category"
                                     value={specificCategory}
                                     onChange={(e) => setSpecificCategory(e.target.value)}
                                     className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
                                 />
+                                 {errors.specificCategory && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">This field is required</p>
+                        )}
+
                             </div>
                         )}
                     </div>
@@ -149,39 +161,49 @@ const UpdateItems = () => {
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Model Name</span>
+                            <span className="text-red-500 text-lg ml-2">*</span>
                         </label>
                         <input
                             type="text"
                             defaultValue={model}
                             placeholder="e.g. AM-10A"
                             {...register("model")}
+                            disabled
                             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
                         />
+
                     </div>
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Country Origin</span>
+                            <span className="text-red-500 text-lg ml-2">*</span>
                         </label>
                         <input
                             type="text"
                             defaultValue={origin}
                             placeholder="e.g. USA "
                             {...register("origin", { required: true })}
-                            required
                             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
                         />
+                        {errors.origin && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">This field is required</p>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-6 mb-6">
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Condition of Item</span>
+                            <span className="text-red-500 text-lg ml-2">*</span>
                         </label>
                         <select
                             {...register("condition", { required: true })}
+                            defaultValue={condition}
                             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
-                            required
                         >
+                            {errors.condition && (
+                                <p className="text-red-500 text-xs font-semibold mt-1">This field is required</p>
+                            )}
                             <option value="Good">Good</option>
                             <option value="Bad">Bad</option>
                         </select>
@@ -189,25 +211,32 @@ const UpdateItems = () => {
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Current Location</span>
+                            <span className="text-red-500 text-lg ml-2">*</span>
                         </label>
                         <input
                             type="text"
                             defaultValue={location}
                             placeholder="e.g. At Store/FM Room "
                             {...register("location", { required: true })}
-                            required
                             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
                         />
+                        {errors.location && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">This field is required</p>
+                        )}
                     </div>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-6 mb-6">
                     <div className="form-control w-full ">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             <span className="label-text">Quantity</span>
+                            <span className="text-red-500 text-lg ml-2">*</span>
                         </label>
-                        <input type="number" defaultValue={quantity} placeholder="e.g. 4" {...register("quantity", { required: true })} required
+                        <input type="number" defaultValue={quantity} placeholder="e.g. 4" {...register("quantity", { required: true })}
                             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
                         />
+                        {errors.quantity && (
+                            <p className="text-red-500 text-xs font-semibold mt-1">This field is required</p>
+                        )}
 
                     </div>
                     <div className="form-control w-full ">

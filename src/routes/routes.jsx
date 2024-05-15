@@ -83,7 +83,7 @@ export const router = createBrowserRouter([
       {
         path: 'updateItem/:id',
         element:<UpdateItems></UpdateItems>,
-        loader: ({params})=> fetch(`https://bbanims-server.vercel.app/item/${params.id}`)
+        loader: ({params})=> fetch(`http://localhost:5000/item/${params.id}`)
 
       },
 
