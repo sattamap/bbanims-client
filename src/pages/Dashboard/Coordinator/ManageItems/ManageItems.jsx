@@ -11,6 +11,7 @@ const ManageItems = () => {
     const axiosPublic = useAxiosPublic();
     const [items, setItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [searchModel, setSearchModel] = useState("");
     const [selectedCondition, setSelectedCondition] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [allCategories, setAllCategories] = useState([]); // State to hold all categories
@@ -83,11 +84,13 @@ const ManageItems = () => {
     };
 
     // Filter items based on search term and selected condition
+    // Filtering logic
     const filteredItems = items.filter((item) => {
         const matchesName = item.itemName.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesModel = item.model.toLowerCase().includes(searchModel.toLowerCase()); // Updated line
         const matchesCondition = selectedCondition === "" || item.condition === selectedCondition;
-        const matchesCategory = selectedCategory === "" || item.category === selectedCategory; // Add category filter
-        return matchesName && matchesCondition && matchesCategory;
+        const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
+        return matchesName && matchesModel && matchesCondition && matchesCategory;
     });
 
     // Calculate the total number of filtered items
@@ -259,40 +262,49 @@ const ManageItems = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="input input-bordered w-full mr-2 mb-4"
                 />
-               
 
-               <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
-    
-    <div className="mb-4 md:mb-0">
-        <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="input input-bordered w-full md:w-36"
-        >
-            <option value="">All Categories</option>
-            {allCategories.map((category, index) => (
-                <option key={index} value={category}>{category}</option>
-            ))}
-        </select>
-    </div>
-    <div className="mb-4 md:mb-0">
-        <select
-            value={selectedCondition}
-            onChange={(e) => setSelectedCondition(e.target.value)}
-            className="input input-bordered w-full md:w-36"
-        >
-            <option value="">All Conditions</option>
-            <option value="Good">Good</option>
-            <option value="Bad">Bad</option>
-        </select>
-    </div>
+                {/* Search by model name */}
+                <input
+                    type="text"
+                    placeholder="Search by model name..."
+                    value={searchModel}
+                    onChange={(e) => setSearchModel(e.target.value)}
+                    className="input input-bordered w-full mr-2 mb-4"
+                />
 
 
-    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:border-l-4 md: border-emerald-900">
-        <button onClick={handleDownloadPDF} className="btn btn-xs bg-teal-300 md:btn-sm md:ml-3">Download PDF</button>
-        <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs md:btn-sm  text-white`}>Download Filtered PDF</button>
-    </div>
-</div>
+                <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
+
+                    <div className="mb-4 md:mb-0">
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="input input-bordered w-full md:w-36"
+                        >
+                            <option value="">All Categories</option>
+                            {allCategories.map((category, index) => (
+                                <option key={index} value={category}>{category}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-4 md:mb-0">
+                        <select
+                            value={selectedCondition}
+                            onChange={(e) => setSelectedCondition(e.target.value)}
+                            className="input input-bordered w-full md:w-36"
+                        >
+                            <option value="">All Conditions</option>
+                            <option value="Good">Good</option>
+                            <option value="Bad">Bad</option>
+                        </select>
+                    </div>
+
+
+                    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:border-l-4 md: border-emerald-900">
+                        <button onClick={handleDownloadPDF} className="btn btn-xs bg-teal-300 md:btn-sm md:ml-3">Download PDF</button>
+                        <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs md:btn-sm  text-white`}>Download Filtered PDF</button>
+                    </div>
+                </div>
 
             </div>
 
