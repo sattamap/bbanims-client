@@ -165,7 +165,7 @@ const UpdateItems = () => {
                         </label>
                         <input
                             type="text"
-                            defaultValue={model}
+                            defaultValue={model ? model : ""}
                             placeholder="e.g. AM-10A"
                             {...register("model")}
                             disabled

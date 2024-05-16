@@ -10,14 +10,14 @@ import "jspdf-autotable";
 const ManageItems = () => {
     const axiosPublic = useAxiosPublic();
     const [items, setItems] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchModel, setSearchModel] = useState("");
+    const [searchItemTerm, setSearchItemTerm] = useState("");
+    const [searchModelTerm, setSearchModelTerm] = useState(""); // New state for model name search term
     const [selectedCondition, setSelectedCondition] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
-    const [allCategories, setAllCategories] = useState([]); // State to hold all categories
+    const [allCategories, setAllCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(5);
-    const [filterApplied, setFilterApplied] = useState(false); // Track if filtering has been applied
+    const [filterApplied, setFilterApplied] = useState(false);
 
 
 
@@ -84,13 +84,12 @@ const ManageItems = () => {
     };
 
     // Filter items based on search term and selected condition
-    // Filtering logic
     const filteredItems = items.filter((item) => {
-        const matchesName = item.itemName.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesModel = item.model.toLowerCase().includes(searchModel.toLowerCase()); // Updated line
+        const matchesName = item.itemName && item.itemName.toLowerCase().includes(searchItemTerm.toLowerCase());
+    const matchesModel = item.model && item.model.toLowerCase().includes(searchModelTerm.toLowerCase());
         const matchesCondition = selectedCondition === "" || item.condition === selectedCondition;
         const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
-        return matchesName && matchesModel && matchesCondition && matchesCategory;
+        return (!searchItemTerm || matchesName) && (!searchModelTerm || matchesModel) && matchesCondition && matchesCategory;
     });
 
     // Calculate the total number of filtered items
@@ -107,7 +106,7 @@ const ManageItems = () => {
     // Update the current page when search term or selected condition changes
     useEffect(() => {
         setCurrentPage(0);
-    }, [searchTerm, selectedCondition]);
+    }, [searchItemTerm, searchModelTerm, selectedCondition]); 
 
     // Handle changes in items per page
     const handleItemsPerPageChange = (e) => {
@@ -245,8 +244,8 @@ const ManageItems = () => {
     };
     // Update filterApplied when searchTerm or selectedCondition changes
     useEffect(() => {
-        setFilterApplied(searchTerm !== "" || selectedCondition !== "" || selectedCategory !== ""); // Update filterApplied state
-    }, [searchTerm, selectedCondition, selectedCategory]);
+        setFilterApplied(searchItemTerm !== "" || searchModelTerm !== "" || selectedCondition !== "" || selectedCategory !== "");
+    }, [searchItemTerm, searchModelTerm, selectedCondition, selectedCategory]); // Include searchModelTerm in dependency array
 
     const isFiltered = filteredItems.length > 0 && filterApplied;
 
@@ -255,56 +254,54 @@ const ManageItems = () => {
         <div>
             {/* Search and filter section */}
             <div className="mb-4">
-                <input
+            <input
                     type="text"
                     placeholder="Search by item name..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={searchItemTerm}
+                    onChange={(e) => setSearchItemTerm(e.target.value)}
                     className="input input-bordered w-full mr-2 mb-4"
                 />
-
                 {/* Search by model name */}
                 <input
                     type="text"
                     placeholder="Search by model name..."
-                    value={searchModel}
-                    onChange={(e) => setSearchModel(e.target.value)}
+                    value={searchModelTerm}
+                    onChange={(e) => setSearchModelTerm(e.target.value)}
                     className="input input-bordered w-full mr-2 mb-4"
                 />
 
+               <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
+    
+    <div className="mb-4 md:mb-0">
+        <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="input input-bordered w-full md:w-36"
+        >
+            <option value="">All Categories</option>
+            {allCategories.map((category, index) => (
+                <option key={index} value={category}>{category}</option>
+            ))}
+        </select>
+    </div>
+    <div className="mb-4 md:mb-0">
+        <select
+            value={selectedCondition}
+            onChange={(e) => setSelectedCondition(e.target.value)}
+            className="input input-bordered w-full md:w-36"
+        >
+            <option value="">All Conditions</option>
+            <option value="Good">Good</option>
+            <option value="Bad">Bad</option>
+        </select>
+    </div>
 
-                <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
 
-                    <div className="mb-4 md:mb-0">
-                        <select
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="input input-bordered w-full md:w-36"
-                        >
-                            <option value="">All Categories</option>
-                            {allCategories.map((category, index) => (
-                                <option key={index} value={category}>{category}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="mb-4 md:mb-0">
-                        <select
-                            value={selectedCondition}
-                            onChange={(e) => setSelectedCondition(e.target.value)}
-                            className="input input-bordered w-full md:w-36"
-                        >
-                            <option value="">All Conditions</option>
-                            <option value="Good">Good</option>
-                            <option value="Bad">Bad</option>
-                        </select>
-                    </div>
-
-
-                    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:border-l-4 md: border-emerald-900">
-                        <button onClick={handleDownloadPDF} className="btn btn-xs bg-teal-300 md:btn-sm md:ml-3">Download PDF</button>
-                        <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs md:btn-sm  text-white`}>Download Filtered PDF</button>
-                    </div>
-                </div>
+    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:border-l-4 md: border-emerald-900">
+        <button onClick={handleDownloadPDF} className="btn btn-xs bg-teal-300 md:btn-sm md:ml-3">Download PDF</button>
+        <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs md:btn-sm  text-white`}>Download Filtered PDF</button>
+    </div>
+</div>
 
             </div>
 
