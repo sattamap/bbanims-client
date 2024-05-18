@@ -19,8 +19,8 @@ const Home = () => {
                 setTotalItems(totalItemsCount);
 
                 // Calculate the total number of "Good" and "Bad" items
-                const goodItemsCount = items.filter(item => item.condition === "Good").length;
-                const badItemsCount = items.filter(item => item.condition === "Bad").length;
+                const goodItemsCount = items.reduce((total, item) => total + (item.condition?.Good || 0), 0);
+                const badItemsCount = items.reduce((total, item) => total + (item.condition?.Bad || 0), 0);
 
                 setTotalGoodItems(goodItemsCount);
                 setTotalBadItems(badItemsCount);
