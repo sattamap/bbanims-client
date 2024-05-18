@@ -11,8 +11,8 @@ const ManageItems = () => {
     const axiosPublic = useAxiosPublic();
     const [items, setItems] = useState([]);
     const [searchItemTerm, setSearchItemTerm] = useState("");
-    const [searchModelTerm, setSearchModelTerm] = useState(""); // New state for model name search term
-    const [selectedCondition, setSelectedCondition] = useState("");
+    const [searchModelTerm, setSearchModelTerm] = useState("");
+    const [selectedCondition, setSelectedCondition] = useState("All Condition");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [allCategories, setAllCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -86,12 +86,20 @@ const ManageItems = () => {
     // Filter items based on search term and selected condition
     const filteredItems = items.filter((item) => {
         const matchesName = item.itemName && item.itemName.toLowerCase().includes(searchItemTerm.toLowerCase());
-    const matchesModel = item.model && item.model.toLowerCase().includes(searchModelTerm.toLowerCase());
-        const matchesCondition = selectedCondition === "" || item.condition === selectedCondition;
+        const matchesModel = item.model && item.model.toLowerCase().includes(searchModelTerm.toLowerCase());
         const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
-        return (!searchItemTerm || matchesName) && (!searchModelTerm || matchesModel) && matchesCondition && matchesCategory;
+        
+        if (selectedCondition === "All Condition") {
+            return (!searchItemTerm || matchesName) && (!searchModelTerm || matchesModel) && matchesCategory;
+        } else if (selectedCondition === "Good") {
+            return (!searchItemTerm || matchesName) && (!searchModelTerm || matchesModel) && matchesCategory && item.condition && item.condition.Good > 0;
+        } else if (selectedCondition === "Bad") {
+            return (!searchItemTerm || matchesName) && (!searchModelTerm || matchesModel) && matchesCategory && item.condition && item.condition.Bad > 0;
+        }
+        
+        return false; // Return false for other conditions or no condition selected
     });
-
+    
     // Calculate the total number of filtered items
     const totalFilteredItems = filteredItems.length;
 
@@ -244,24 +252,106 @@ const ManageItems = () => {
     };
     // Update filterApplied when searchTerm or selectedCondition changes
     useEffect(() => {
-        setFilterApplied(searchItemTerm !== "" || searchModelTerm !== "" || selectedCondition !== "" || selectedCategory !== "");
-    }, [searchItemTerm, searchModelTerm, selectedCondition, selectedCategory]); // Include searchModelTerm in dependency array
+        setFilterApplied(searchItemTerm !== "" || searchModelTerm !== "" || selectedCondition !== "All Condition" || selectedCategory !== "");
+    }, [searchItemTerm, searchModelTerm, selectedCondition, selectedCategory]);
 
     const isFiltered = filteredItems.length > 0 && filterApplied;
 
+    const columns =
+        selectedCondition === "All Condition" ?
+        ['#', 'Name,Model & Origin', 'Good Quantity','Location of Good Item', 'Bad Quantity','Location of Bad Item',  'Category & Date', 'Action'] :
+        selectedCondition === "Good" ?
+        ['#', 'Name,Model & Origin', 'Good Quantity', 'Location of Good Item', 'Category & Date', 'Action'] :
+        ['#', 'Name,Model & Origin', 'Bad Quantity', 'Location of Good Item','Category & Date', 'Action'];
 
+   const tableHeader = (
+        <thead>
+            <tr>
+                {columns.map((column, index) => (
+                    <th key={index} className="text-center">{column}</th>
+                ))}
+            </tr>
+        </thead>
+    );
+
+    const tableBody = (
+        <tbody>
+            {paginatedItems.map((item, index) => (
+                <tr key={item._id}>
+                    <td>{startIndex + index + 1}.</td>
+                    <td>
+                        <div className="flex items-center gap-3">
+                            <div className="avatar">
+                                <div className="mask mask-squircle w-12 h-12">
+                                    <img src={item?.image} alt={item?.itemName} />
+                                </div>
+                            </div>
+                            <div>
+                                <div className="font-bold">{item?.itemName}</div>
+                                <div className="text-sm opacity-50">{item?.model}</div>
+                                <div className="text-sm opacity-50">{item?.origin}</div>
+                            </div>
+                        </div>
+                    </td>
+                    {selectedCondition === "All Condition" && (
+                        <>
+                            <td className="text-center">{item?.condition?.Good}</td>
+                            <td className="text-center">{item?.locationGood}</td>
+                            <td className="text-center">{item?.condition?.Bad}</td>
+                            <td className="text-center">{item?.locationBad}</td>
+                        </>
+                    )}
+                    {selectedCondition === "Good" && (
+                        <>
+                            <td className="text-center">{item?.condition?.Good}</td>
+                             <td className="text-center">{item?.locationGood}</td>
+                            
+                        </>
+                    )}
+                    {selectedCondition === "Bad" && (
+                        <>
+                            
+                            <td className="text-center">{item?.condition?.Bad}</td>
+                            <td className="text-center">{item?.locationGood}</td>
+                        </>
+                    )}
+                    <td>
+                        <div className="text-center">
+                            <p>{item?.category}</p>
+                            <p>{item?.date}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div className="flex gap-2 justify-center">
+                            <button
+                                className="btn btn-warning btn-xs"
+                                onClick={() => handleDelete(item)}
+                            >
+                                Delete
+                            </button>
+                            <Link to={`/dashboard/updateItem/${item._id}`}>
+                                <button className="btn btn-neutral btn-xs">Edit</button>
+                            </Link>
+                            <Link to={`/dashboard/details/${item._id}`}>
+                                <button className="btn btn-neutral btn-xs">Details</button>
+                            </Link>
+                        </div>
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+    );
+    
     return (
         <div>
-            {/* Search and filter section */}
             <div className="mb-4">
-            <input
+                <input
                     type="text"
                     placeholder="Search by item name..."
                     value={searchItemTerm}
                     onChange={(e) => setSearchItemTerm(e.target.value)}
                     className="input input-bordered w-full mr-2 mb-4"
                 />
-                {/* Search by model name */}
                 <input
                     type="text"
                     placeholder="Search by model name..."
@@ -269,114 +359,42 @@ const ManageItems = () => {
                     onChange={(e) => setSearchModelTerm(e.target.value)}
                     className="input input-bordered w-full mr-2 mb-4"
                 />
-
-               <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
-    
-    <div className="mb-4 md:mb-0">
-        <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="input input-bordered w-full md:w-36"
-        >
-            <option value="">All Categories</option>
-            {allCategories.map((category, index) => (
-                <option key={index} value={category}>{category}</option>
-            ))}
-        </select>
-    </div>
-    <div className="mb-4 md:mb-0">
-        <select
-            value={selectedCondition}
-            onChange={(e) => setSelectedCondition(e.target.value)}
-            className="input input-bordered w-full md:w-36"
-        >
-            <option value="">All Conditions</option>
-            <option value="Good">Good</option>
-            <option value="Bad">Bad</option>
-        </select>
-    </div>
-
-
-    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:border-l-4 md: border-emerald-900">
-        <button onClick={handleDownloadPDF} className="btn btn-xs bg-teal-300 md:btn-sm md:ml-3">Download PDF</button>
-        <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs md:btn-sm  text-white`}>Download Filtered PDF</button>
-    </div>
-</div>
-
+                <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
+                    <div className="mb-4 md:mb-0">
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="input input-bordered w-full md:w-36"
+                        >
+                            <option value="">All Categories</option>
+                            {allCategories.map((category, index) => (
+                                <option key={index} value={category}>{category}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-4 md:mb-0">
+                        <select
+                            value={selectedCondition}
+                            onChange={(e) => setSelectedCondition(e.target.value)}
+                            className="input input-bordered w-full md:w-36"
+                        >
+                            <option value="All Condition">All Conditions</option>
+                            <option value="Good">Good</option>
+                            <option value="Bad">Bad</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:border-l-4 md: border-emerald-900">
+                        <button onClick={handleDownloadPDF} className="btn btn-xs bg-teal-300 md:btn-sm md:ml-3">Download PDF</button>
+                        <button onClick={handleDownloadFilteredPDF} disabled={!isFiltered} className={`btn ${isFiltered ? 'bg-green-500' : 'bg-gray-300'} btn-xs md:btn-sm  text-white`}>Download Filtered PDF</button>
+                    </div>
+                </div>
             </div>
-
-            {/* Table for displaying items */}
             <div className="overflow-x-auto">
                 <table className="table table-xs">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th><p className=''>Name, Image, Model, & Origin</p></th>
-                            <th><p className='text-center'>Quantity</p></th>
-                            <th><p className='text-center'>Category & Date</p></th>
-                            <th><p className='text-center'>Location & Condition</p></th>
-                            <th><p className='text-center'>Action</p></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedItems.map((item, index) => (
-                            <tr key={item._id}>
-                                <td>{startIndex + index + 1}.</td>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle w-12 h-12">
-                                                <img src={item?.image} alt={item?.itemName} />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="font-bold">{item?.itemName}</div>
-                                            <div className="text-sm opacity-50">{item?.model}</div>
-                                            <div className="text-sm opacity-50">{item?.origin}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><p className="text-center">{item?.quantity}</p></td>
-                                <td>
-                                    <div className="text-center">
-                                        <p>{item?.category}</p>
-                                        <p>{item?.date}</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="flex flex-col items-center">
-                                        <p>{item?.location}</p>
-                                        <p
-                                            className={`${item?.condition === "Good" ? "bg-green-300 p-1 rounded" : "bg-red-400 p-1 px-2 rounded"
-                                                }`}
-                                        >
-                                            {item?.condition}
-                                        </p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="flex gap-2 justify-center">
-                                        <button
-                                            className="btn btn-warning btn-xs"
-                                            onClick={() => handleDelete(item)}
-                                        >
-                                            Delete
-                                        </button>
-                                        <Link to={`/dashboard/updateItem/${item._id}`}>
-                                            <button className="btn btn-neutral btn-xs">Edit</button>
-                                        </Link>
-                                        <Link to={`/dashboard/details/${item._id}`}>
-                                            <button className="btn btn-neutral btn-xs">Details</button>
-                                        </Link>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
+                    {tableHeader}
+                    {tableBody}
                 </table>
             </div>
-
-            {/* Pagination controls */}
             <div className="flex flex-col lg:flex-row items-center justify-center mt-4">
                 <div className="mb-4 lg:mb-0 lg:mr-4">
                     <select
@@ -393,7 +411,6 @@ const ManageItems = () => {
                     {renderPageNumbers()}
                 </nav>
             </div>
-
         </div>
     );
 };

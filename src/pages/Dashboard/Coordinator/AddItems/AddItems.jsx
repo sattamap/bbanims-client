@@ -51,19 +51,29 @@ const AddItems = () => {
       // Handle the case where no image is selected
     }
 
-    // Create the item object
-    const item = {
-      itemName: data.itemName,
-      category: category === "Others" ? specificCategory : category,
-      model: data.model,
-      origin: data.origin,
-      condition: data.condition,
-      location: data.location,
-      quantity: data.quantity,
-      date: data.date,
-      detail: data.detail,
-      image: imageUrl, // Use the image URL if available, otherwise empty string
-    };
+     // Create the condition object
+  const condition = {
+    Good: parseInt(data.goodQuantity), // Convert string to number
+    Bad: parseInt(data.badQuantity), // Convert string to number
+  };
+
+  // Calculate totalQuantity as the sum of Good and Bad quantities
+  const totalQuantity = condition.Good + condition.Bad;
+
+  // Create the item object
+  const item = {
+    itemName: data.itemName,
+    category: category === "Others" ? specificCategory : category,
+    model: data.model,
+    origin: data.origin,
+    condition: condition, // Assign the condition object
+    locationGood: data.locationGood,
+    locationBad: data.locationBad,
+    totalQuantity: totalQuantity, // Assign the totalQuantity value
+    date: data.date,
+    detail: data.detail,
+    image: imageUrl, // Use the image URL if available, otherwise empty string
+  };
 
     // Save the item in your database
   try {
@@ -196,29 +206,28 @@ const AddItems = () => {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row gap-6 mb-6">
-          <div className="form-control w-full ">
+        <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Condition of Items</span>
-              <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
-            </label>
-            <select
-              {...register("condition", { required: true })}
-              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
-              required
-            >
-              <option value="Good">Good</option>
-              <option value="Bad">Bad</option>
-            </select>
-          </div>
-          <div className="form-control w-full ">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Current Location</span>
+              <span className="label-text">Good Quantity</span>
               <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
             </label>
             <input
-              type="text"
-              placeholder="e.g. At Store/FM Room"
-              {...register("location", { required: true })}
+              type="number"
+              placeholder="e.g. 4"
+              {...register("goodQuantity", { required: true })}
+              required
+              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+            />
+          </div>
+          <div className="form-control w-full ">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <span className="label-text">Bad Quantity</span>
+              <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
+            </label>
+            <input
+              type="number"
+              placeholder="e.g. 4"
+              {...register("badQuantity", { required: true })}
               required
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
             />
@@ -226,20 +235,46 @@ const AddItems = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6 mb-6">
+       
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Quantity</span>
+              <span className="label-text">Current Location of Good Item</span>
               <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
             </label>
             <input
-              type="number"
-              placeholder="e.g. 4"
-              {...register("quantity", { required: true })}
+              type="text"
+              placeholder="e.g. At Store/FM Room"
+              {...register("locationGood", { required: true })}
               required
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
             />
           </div>
           <div className="form-control w-full ">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <span className="label-text">Current Location of Bad Item</span>
+              <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. At Store/FM Room"
+              {...register("locationBad", { required: true })}
+              required
+              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+            />
+          </div>
+          <div className="form-control w-full ">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              <span className="label-text">Date of Receive</span>
+              <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
+            </label>
+            <input
+              type="date"
+              id="receive"
+              {...register("date", {})}
+              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
+            />
+          </div>
+          {/* <div className="form-control w-full ">
             <label
               htmlFor="deadline"
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -252,7 +287,7 @@ const AddItems = () => {
               {...register("date", {})}
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex gap-6 mb-6">
           <div className="form-control w-full ">
