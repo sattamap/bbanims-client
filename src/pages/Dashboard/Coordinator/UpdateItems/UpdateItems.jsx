@@ -247,7 +247,7 @@ const UpdateItems = () => {
         <div className="flex flex-col lg:flex-row gap-6 mb-6">
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Good Condition</span>
+              <span className="label-text">Good Quantity</span>
               <span className="text-red-500 text-lg ml-2">*</span>
             </label>
             <div className="flex items-center">
@@ -275,7 +275,7 @@ const UpdateItems = () => {
           </div>
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Bad Condition</span>
+              <span className="label-text">Defective Quantity</span>
               <span className="text-red-500 text-lg ml-2">*</span>
             </label>
             <div className="flex gap-2">
@@ -310,7 +310,7 @@ const UpdateItems = () => {
           </div>
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Location (Bad)</span>
+              <span className="label-text">Location (Defective)</span>
               <span className="text-red-500 text-lg ml-2">*</span>
             </label>
             <input

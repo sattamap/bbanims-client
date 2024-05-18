@@ -221,7 +221,7 @@ const AddItems = () => {
           </div>
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Bad Quantity</span>
+              <span className="label-text">Defective Quantity</span>
               <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
             </label>
             <input
@@ -251,7 +251,7 @@ const AddItems = () => {
           </div>
           <div className="form-control w-full ">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              <span className="label-text">Current Location of Bad Item</span>
+              <span className="label-text">Current Location of Defective Item</span>
               <span className="text-red-500 text-lg ml-2">*</span> {/* Red star for required field */}
             </label>
             <input

@@ -243,7 +243,7 @@ const ManageItems = () => {
 
         doc.autoTable({
             head: [
-                ['#', 'Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']
+                ['#', 'Name', 'Model', 'Origin', 'Good item','Location (Good)', 'Defective item','Location (Defective)','Total item', 'Category', 'Date', 'Condition']
             ],
             body: tableData,
         });
@@ -259,10 +259,10 @@ const ManageItems = () => {
 
     const columns =
         selectedCondition === "All Condition" ?
-        ['#', 'Name,Model & Origin', 'Good Quantity','Location of Good Item', 'Bad Quantity','Location of Bad Item',  'Category & Date', 'Action'] :
+        ['#', 'Name,Model & Origin', 'Good item','Location (Good)', 'Defective item','Location (Defective)','Total item',  'Category & Date', 'Action'] :
         selectedCondition === "Good" ?
-        ['#', 'Name,Model & Origin', 'Good Quantity', 'Location of Good Item', 'Category & Date', 'Action'] :
-        ['#', 'Name,Model & Origin', 'Bad Quantity', 'Location of Good Item','Category & Date', 'Action'];
+        ['#', 'Name,Model & Origin', 'Good item', 'Location (Good)', 'Category & Date', 'Action'] :
+        ['#', 'Name,Model & Origin', 'Defective item', 'Location (Defective)','Category & Date', 'Action'];
 
    const tableHeader = (
         <thead>
@@ -315,6 +315,11 @@ const ManageItems = () => {
                             <td className="text-center">{item?.locationGood}</td>
                         </>
                     )}
+                    <td>
+                        <div className="text-center">
+                        <p>{item?.totalQuantity}</p>
+                        </div>
+                    </td>
                     <td>
                         <div className="text-center">
                             <p>{item?.category}</p>

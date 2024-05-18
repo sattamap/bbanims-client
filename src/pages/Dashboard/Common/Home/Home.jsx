@@ -54,7 +54,7 @@ const Home = () => {
 
                 {/* Total Bad Items */}
                 <div className="bg-gradient-to-r from-red-500 to-red-700 shadow-lg rounded-lg p-6 text-center hover:shadow-xl transition-shadow duration-300">
-                    <h3 className="text-xl font-semibold text-white mb-2">Total Bad Items</h3>
+                    <h3 className="text-xl font-semibold text-white mb-2">Total Defective Items</h3>
                     <p className="text-4xl font-bold text-white">{totalBadItems}</p>
                 </div>
             </div>
