@@ -216,40 +216,70 @@ const ManageItems = () => {
     // Function to generate and download PDF
     const handleDownloadPDF = () => {
         const doc = new jsPDF();
-        const tableData = items.map((item, index) => [startIndex + index + 1, item.itemName, item.model, item.origin, item.quantity, item.category, item.date, item.location, item.condition]);
+        const tableData = items.map((item, index) => [
+            startIndex + index + 1, 
+            `item.itemName,
+            item.model,
+            item.origin,`,
+            item.condition.Good,
+            item.locationGood,
+            item.condition.Bad,
+            item.locationBad,
+            item.totalQuantity,
+            item.category,
+            item.date,]);
 
         doc.autoTable({
-            head: [['#', 'Name', 'Model', 'Origin', 'Quantity', 'Category', 'Date', 'Location', 'Condition']],
+            head: [['#', 'Name, Model & Origin', 'Good item','Location (Good)', 'Defective item','Location (Defective)','Total item', 'Category', 'Date']],
             body: tableData,
         });
 
         doc.save('items.pdf');
     };
 
-    // Function to generate and download PDF for filtered items
-    const handleDownloadFilteredPDF = () => {
-        const doc = new jsPDF();
-        const tableData = filteredItems.map((item, index) => [
+// Function to generate and download PDF for filtered items
+const handleDownloadFilteredPDF = () => {
+    const doc = new jsPDF();
+
+    // Define headers and data mapping based on the selected condition
+    let headers = [];
+    let tableData = [];
+
+    if (selectedCondition === "Good") {
+        headers = [
+            ['#', 'Name, Model & Origin', 'Good item', 'Location (Good)', 'Total item', 'Category & Date']
+        ];
+        tableData = filteredItems.map((item, index) => [
             startIndex + index + 1,
-            item.itemName,
-            item.model,
-            item.origin,
-            item.quantity,
-            item.category,
-            item.date,
-            item.location,
-            item.condition,
+            [`${item.itemName}`, `${item.model}`, `${item.origin}`], // Multi-line text array
+            item.condition?.Good,
+            item.locationGood,
+            item.totalQuantity,
+            [`${item.category}`, `${item.date}`] // Multi-line text array
         ]);
+    } else if (selectedCondition === "Bad") {
+        headers = [
+            ['#', 'Name, Model & Origin', 'Defective item', 'Location (Defective)', 'Total item', 'Category & Date']
+        ];
+        tableData = filteredItems.map((item, index) => [
+            startIndex + index + 1,
+            [`${item.itemName}`, `${item.model}`, `${item.origin}`], // Multi-line text array
+            item.condition?.Bad,
+            item.locationBad,
+            item.totalQuantity,
+            [`${item.category}`, `${item.date}`] // Multi-line text array
+        ]);
+    }
 
-        doc.autoTable({
-            head: [
-                ['#', 'Name', 'Model', 'Origin', 'Good item','Location (Good)', 'Defective item','Location (Defective)','Total item', 'Category', 'Date', 'Condition']
-            ],
-            body: tableData,
-        });
+    // Generate PDF with the dynamically set headers and table data
+    doc.autoTable({
+        head: headers,
+        body: tableData,
+    });
 
-        doc.save('filtered_items.pdf');
-    };
+    doc.save('filtered_items.pdf');
+};
+
     // Update filterApplied when searchTerm or selectedCondition changes
     useEffect(() => {
         setFilterApplied(searchItemTerm !== "" || searchModelTerm !== "" || selectedCondition !== "All Condition" || selectedCategory !== "");
@@ -261,8 +291,8 @@ const ManageItems = () => {
         selectedCondition === "All Condition" ?
         ['#', 'Name,Model & Origin', 'Good item','Location (Good)', 'Defective item','Location (Defective)','Total item',  'Category & Date', 'Action'] :
         selectedCondition === "Good" ?
-        ['#', 'Name,Model & Origin', 'Good item', 'Location (Good)', 'Category & Date', 'Action'] :
-        ['#', 'Name,Model & Origin', 'Defective item', 'Location (Defective)','Category & Date', 'Action'];
+        ['#', 'Name,Model & Origin', 'Good item', 'Location (Good)','Total item', 'Category & Date', 'Action'] :
+        ['#', 'Name,Model & Origin', 'Defective item', 'Location (Defective)','Total item','Category & Date', 'Action'];
 
    const tableHeader = (
         <thead>

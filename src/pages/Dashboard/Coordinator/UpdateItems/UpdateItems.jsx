@@ -226,7 +226,7 @@ const UpdateItems = () => {
               defaultValue={model}
               placeholder="e.g. AM-10A"
               {...register("model")}
-              disabled
+              //disabled
               className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm md:text-base"
             />
           </div>
